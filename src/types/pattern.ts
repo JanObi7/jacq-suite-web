@@ -19,6 +19,8 @@ export interface Pattern {
   designer: string
   origin: string
   technique: string
+  width: number
+  height: number
   colors: string[]
   description: string
   tags: string[]

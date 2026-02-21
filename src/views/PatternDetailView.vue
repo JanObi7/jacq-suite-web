@@ -189,6 +189,14 @@
                   <v-list-item-title class="text-caption text-medium-emphasis">Technik</v-list-item-title>
                   <v-list-item-subtitle class="text-body-2 font-weight-medium">{{ pattern.technique }}</v-list-item-subtitle>
                 </v-list-item>
+                <v-list-item>
+                  <template #prepend>
+                    <v-icon icon="mdi-cog-outline" color="primary" size="20" />
+                  </template>
+                  <v-list-item-title class="text-caption text-medium-emphasis">Größe</v-list-item-title>
+                  <v-list-item-subtitle class="text-body-2 font-weight-medium">{{ pattern.width.toLocaleString('de-DE') }} × {{ pattern.height.toLocaleString('de-DE') }}</v-list-item-subtitle>
+                </v-list-item>
+                
                 <v-divider inset />
                 <v-list-item>
                   <template #prepend>
