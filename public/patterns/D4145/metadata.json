@@ -2,7 +2,8 @@
   "id": "D4145",
   "name": "Muster D4145",
   "year": 1920,
-  "digitizedAt": "2026-02-22",
+  "digitizedAt": "2025-11-20",
+  "digitizedBy": "Jan Obermüller",
   "designer": "Tannenhauer",
   "origin": "Deutschland",
   "technique": "Jacquard-Gewebe",
@@ -28,9 +29,39 @@
       "thumbnailUrl": "/jacq-suite-web/patterns/D4145/00000339.tif.thumb.jpg",
       "role": "paper_template",
       "label": "Papiervorlage 1",
-      "width": 2000,
-      "height": 1500,
-      "isHighResolution": false
+      "width": 5000,
+      "height": 5000,
+      "isHighResolution": true
+    },
+    {
+      "id": "D4145-4",
+      "url": "/jacq-suite-web/patterns/D4145/00000340.tif.original.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D4145/00000340.tif.thumb.jpg",
+      "role": "paper_template",
+      "label": "Papiervorlage 2",
+      "width": 5000,
+      "height": 5000,
+      "isHighResolution": true
+    },
+    {
+      "id": "D4145-5",
+      "url": "/jacq-suite-web/patterns/D4145/00000341.tif.original.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D4145/00000341.tif.thumb.jpg",
+      "role": "paper_template",
+      "label": "Papiervorlage 3",
+      "width": 5000,
+      "height": 5000,
+      "isHighResolution": true
+    },
+    {
+      "id": "D4145-6",
+      "url": "/jacq-suite-web/patterns/D4145/00000342.tif.original.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D4145/00000342.tif.thumb.jpg",
+      "role": "paper_template",
+      "label": "Papiervorlage 4",
+      "width": 5000,
+      "height": 5000,
+      "isHighResolution": true
     },
     {
       "id": "D4145-3",
@@ -41,36 +72,6 @@
       "width": 16000,
       "height": 12000,
       "isHighResolution": true
-    },
-    {
-      "id": "D4145-4",
-      "url": "/jacq-suite-web/patterns/D4145/00000340.tif.original.jpg",
-      "thumbnailUrl": "/jacq-suite-web/patterns/D4145/00000340.tif.thumb.jpg",
-      "role": "other",
-      "label": "Detail 1",
-      "width": 2000,
-      "height": 1500,
-      "isHighResolution": false
-    },
-    {
-      "id": "D4145-5",
-      "url": "/jacq-suite-web/patterns/D4145/00000341.tif.original.jpg",
-      "thumbnailUrl": "/jacq-suite-web/patterns/D4145/00000341.tif.thumb.jpg",
-      "role": "other",
-      "label": "Detail 2",
-      "width": 2000,
-      "height": 1500,
-      "isHighResolution": false
-    },
-    {
-      "id": "D4145-6",
-      "url": "/jacq-suite-web/patterns/D4145/00000342.tif.original.jpg",
-      "thumbnailUrl": "/jacq-suite-web/patterns/D4145/00000342.tif.thumb.jpg",
-      "role": "other",
-      "label": "Detail 3",
-      "width": 2000,
-      "height": 1500,
-      "isHighResolution": false
     }
   ]
 }

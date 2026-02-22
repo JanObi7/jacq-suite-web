@@ -1,16 +1,16 @@
 {
   "id": "D1723",
   "name": "Muster D1723",
-  "year": 1928,
-  "digitizedAt": "2026-02-18",
-  "designer": "Unbekannt",
-  "origin": "Deutschland",
+  "year": 1926,
+  "digitizedAt": "2025-06-24",
+  "designer": "Tannenhauer",
+  "origin": "Braunsdorf, Deutschland",
   "technique": "Jacquard-Gewebe",
-  "width": 3000,
-  "height": 2200,
-  "colors": ["Blau", "Weiß", "Gold"],
-  "description": "Elegantes Jacquard-Muster aus der späten 1920er Jahren mit Art-Déco-Einflüssen.",
-  "tags": ["Art Déco", "Elegant"],
+  "width": 880,
+  "height": 136,
+  "colors": ["Rot", "Weiß", "Grau"],
+  "description": "Etwas abstraktes Rosenmuster.",
+  "tags": ["Rosen"],
   "images": [
     {
       "id": "D1723-1",
@@ -24,22 +24,22 @@
     },
     {
       "id": "D1723-2",
-      "url": "/jacq-suite-web/patterns/D1723/design_scan_small.jpg",
-      "thumbnailUrl": "/jacq-suite-web/patterns/D1723/design_scan_small.jpg",
+      "url": "/jacq-suite-web/patterns/D1723/00000239.tif.original.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D1723/00000239.tif.thumb.jpg",
       "role": "paper_template",
       "label": "Papiervorlage",
-      "width": 800,
-      "height": 600,
-      "isHighResolution": false
+      "width": 11187,
+      "height": 5466,
+      "isHighResolution": true
     },
     {
       "id": "D1723-3",
-      "url": "/jacq-suite-web/patterns/D1723/design_full_small.png",
-      "thumbnailUrl": "/jacq-suite-web/patterns/D1723/symbol.png",
+      "url": "/jacq-suite-web/patterns/D1723/design.full.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D1723/design.thumb.png",
       "role": "digital_pattern",
       "label": "Digitales Muster",
-      "width": 17000,
-      "height": 13000,
+      "width": 7440,
+      "height": 3120,
       "isHighResolution": true
     }
   ]
