@@ -24,23 +24,33 @@
     },
     {
       "id": "D1694-2",
-      "url": "/jacq-suite-web/patterns/D1694/design_scan_small.jpg",
-      "thumbnailUrl": "/jacq-suite-web/patterns/D1694/design_scan_small.jpg",
+      "url": "/jacq-suite-web/patterns/D1694/pattern.original.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D1694/pattern.thumb.jpg",
       "role": "paper_template",
       "label": "Papiervorlage",
       "width": 800,
       "height": 600,
-      "isHighResolution": false
+      "isHighResolution": true
     },
     {
       "id": "D1694-3",
-      "url": "/jacq-suite-web/patterns/D1694/design_full_small.png",
-      "thumbnailUrl": "/jacq-suite-web/patterns/D1694/design_full_small.png",
+      "url": "/jacq-suite-web/patterns/D1694/design.full.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D1694/design.thumb.png",
       "role": "digital_pattern",
       "label": "Digitales Muster",
       "width": 15500,
       "height": 11000,
-      "isHighResolution": false
+      "isHighResolution": true
+    },
+    {
+      "id": "D1694-4",
+      "url": "/jacq-suite-web/patterns/D1694/binding.original.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D1694/binding.thumb.jpg",
+      "role": "other",
+      "label": "Bindungsvorschrift",
+      "width": 4300,
+      "height": 2900,
+      "isHighResolution": true
     }
   ]
 }

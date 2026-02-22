@@ -1,16 +1,17 @@
 {
   "id": "D2115",
-  "name": "Muster D2115",
-  "year": 1932,
-  "digitizedAt": "2026-02-16",
-  "designer": "Unbekannt",
-  "origin": "Deutschland",
+  "name": "D2115",
+  "year": 1925,
+  "digitizedAt": "2025-06-24",
+  "digitizedBy": "Jan Obermüller",
+  "designer": "Tannenhauer",
+  "origin": "Braunsdorf, Deutschland",
   "technique": "Jacquard-Gewebe",
-  "width": 3200,
-  "height": 2400,
-  "colors": ["Grün", "Gelb", "Braun"],
-  "description": "Naturinspiriertes Jacquard-Muster aus den 1930er Jahren mit organischen Formen.",
-  "tags": ["Natur", "Organisch"],
+  "width": 880,
+  "height": 270,
+  "colors": ["Rot", "Weiß", "Grau"],
+  "description": "Laufendes Ornamentmuster mit abstrakten Blüten.",
+  "tags": ["Ornament", "Blumen"],
   "images": [
     {
       "id": "D2115-1",
@@ -24,22 +25,32 @@
     },
     {
       "id": "D2115-2",
-      "url": "/jacq-suite-web/patterns/D2115/design_scan_small.jpg",
-      "thumbnailUrl": "/jacq-suite-web/patterns/D2115/design_scan_small.jpg",
+      "url": "/jacq-suite-web/patterns/D2115/00000221.tif.original.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D2115/00000221.tif.thumb.jpg",
       "role": "paper_template",
       "label": "Papiervorlage",
-      "width": 800,
-      "height": 600,
-      "isHighResolution": false
+      "width": 6300,
+      "height": 11000,
+      "isHighResolution": true
     },
     {
       "id": "D2115-3",
-      "url": "/jacq-suite-web/patterns/D2115/design_full_small.png",
-      "thumbnailUrl": "/jacq-suite-web/patterns/D2115/symbol.png",
+      "url": "/jacq-suite-web/patterns/D2115/00000222.tif.original.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D2115/00000222.tif.thumb.jpg",
+      "role": "paper_template",
+      "label": "Papiervorlage",
+      "width": 6600,
+      "height": 11000,
+      "isHighResolution": true
+    },
+    {
+      "id": "D2115-4",
+      "url": "/jacq-suite-web/patterns/D2115/design.full.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D2115/design.thumb.png",
       "role": "digital_pattern",
       "label": "Digitales Muster",
-      "width": 18000,
-      "height": 14000,
+      "width": 5700,
+      "height": 4700,
       "isHighResolution": true
     }
   ]

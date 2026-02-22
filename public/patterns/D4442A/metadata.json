@@ -1,16 +1,17 @@
 {
   "id": "D4442A",
-  "name": "Muster D4442A",
-  "year": 1940,
-  "digitizedAt": "2026-02-15",
-  "designer": "Unbekannt",
-  "origin": "Deutschland",
+  "name": "D4442A",
+  "year": 1900,
+  "digitizedAt": "2025-06-29",
+  "digitizedBy": "Jan Obermüller",
+  "designer": "Tannenhauer",
+  "origin": "Braunsdorf, Deutschland",
   "technique": "Jacquard-Gewebe",
-  "width": 2600,
-  "height": 1900,
-  "colors": ["Blau", "Silber", "Weiß"],
-  "description": "Elegantes Jacquard-Muster aus den 1940er Jahren mit feinen Details.",
-  "tags": ["Elegant", "Fein"],
+  "width": 440,
+  "height": 96,
+  "colors": ["Rot", "Weiß", "Grau"],
+  "description": "Mehrfarbiges Rosenmuster mit großen Blüten.",
+  "tags": ["Ornament", "Rose"],
   "images": [
     {
       "id": "D4442A-1",
@@ -24,22 +25,22 @@
     },
     {
       "id": "D4442A-2",
-      "url": "/jacq-suite-web/patterns/D4442A/design_scan_small.jpg",
-      "thumbnailUrl": "/jacq-suite-web/patterns/D4442A/design_scan_small.jpg",
+      "url": "/jacq-suite-web/patterns/D4442A/00000252.tif.original.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D4442A/00000252.tif.thumb.jpg",
       "role": "paper_template",
       "label": "Papiervorlage",
-      "width": 800,
-      "height": 600,
-      "isHighResolution": false
+      "width": 7200,
+      "height": 5000,
+      "isHighResolution": true
     },
     {
       "id": "D4442A-3",
-      "url": "/jacq-suite-web/patterns/D4442A/design_full_small.png",
-      "thumbnailUrl": "/jacq-suite-web/patterns/D4442A/symbol.png",
+      "url": "/jacq-suite-web/patterns/D4442A/design.full.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D4442A/design.thumb.png",
       "role": "digital_pattern",
       "label": "Digitales Muster",
-      "width": 17500,
-      "height": 13500,
+      "width": 3300,
+      "height": 2100,
       "isHighResolution": true
     }
   ]
