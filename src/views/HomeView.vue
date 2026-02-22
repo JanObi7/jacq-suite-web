@@ -8,7 +8,7 @@
           <h1 class="text-h5 font-weight-bold">Digitale Jacquard-Muster</h1>
         </div>
         <p class="text-body-2 mb-3 mx-auto hero-subtitle" style="max-width: 560px">
-          Eine Sammlung historischer und moderner Webmuster – digitalisiert und für die Nachwelt bewahrt.
+          Eine Sammlung historischer Webmuster – digitalisiert und für die Nachwelt bewahrt.
         </p>
         <v-btn
           to="/patterns"
