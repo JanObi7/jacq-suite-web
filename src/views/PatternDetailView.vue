@@ -360,7 +360,7 @@ onMounted(() => {
 
 const pattern = computed(() => store.getPatternById(route.params.id as string))
 
-const activeImage = ref<PatternImage|undefined>(
+const activeImage = ref<PatternImage>(
   pattern.value?.images.find((img) => img.role === 'thumbnail') ??
     pattern.value?.images[0] ?? {
       id: '',
@@ -372,7 +372,14 @@ const activeImage = ref<PatternImage|undefined>(
 )
 
 watch(pattern, async (newPattern, oldPattern) => {
-  activeImage.value = pattern.value?.images.find((img) => img.role === 'thumbnail')
+  activeImage.value = pattern.value?.images.find((img) => img.role === 'thumbnail') ??
+    pattern.value?.images[0] ?? {
+      id: '',
+      url: '',
+      thumbnailUrl: '',
+      role: 'other',
+      label: '',
+    }
 })
 
 const highResCount = computed(
