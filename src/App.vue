@@ -5,19 +5,47 @@
       <v-app-bar-nav-icon @click="drawer = !drawer" />
       <v-app-bar-title>
         <router-link to="/" class="text-decoration-none text-white d-flex align-center ga-2">
-          <v-icon icon="mdi-loom" size="28" />
           <span class="font-weight-bold">JacqSuite</span>
         </router-link>
       </v-app-bar-title>
 
       <v-spacer />
 
-      <v-btn to="/" variant="text" color="white" prepend-icon="mdi-home">
+      <!-- Desktop: Buttons mit Text -->
+      <v-btn 
+        to="/" 
+        variant="text" 
+        color="white" 
+        prepend-icon="mdi-home"
+        class="d-none d-sm-flex"
+      >
         Startseite
       </v-btn>
-      <v-btn to="/patterns" variant="text" color="white" prepend-icon="mdi-view-grid">
+      <v-btn 
+        to="/patterns" 
+        variant="text" 
+        color="white" 
+        prepend-icon="mdi-view-grid"
+        class="d-none d-sm-flex"
+      >
         Alle Muster
       </v-btn>
+
+      <!-- Mobile: Nur Icons -->
+      <v-btn 
+        to="/" 
+        icon="mdi-home"
+        variant="text" 
+        color="white"
+        class="d-sm-none"
+      />
+      <v-btn 
+        to="/patterns" 
+        icon="mdi-view-grid"
+        variant="text" 
+        color="white"
+        class="d-sm-none"
+      />
 
       <v-btn
         :icon="theme === 'dark' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
@@ -32,7 +60,7 @@
       <v-list-item
         prepend-icon="mdi-loom"
         title="JacqSuite"
-        subtitle="Digitale Webmuster"
+        subtitle="Digitale Jacquard-Muster"
         nav
       />
       <v-divider />
@@ -70,7 +98,7 @@
 import { ref } from 'vue'
 
 const drawer = ref(false)
-const theme = ref<'light' | 'dark'>('dark')
+const theme = ref<'light' | 'dark'>('light')
 
 function toggleTheme() {
   theme.value = theme.value === 'light' ? 'dark' : 'light'

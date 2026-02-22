@@ -24,7 +24,7 @@
             <div>
               <div class="text-body-1 font-weight-bold">{{ pattern.name }}</div>
               <div class="text-caption text-medium-emphasis">
-                {{ pattern.year }} · {{ pattern.technique }} · {{ pattern.origin }}
+                {{ pattern.year }} · {{ pattern.designer }} · {{ pattern.technique }} · {{ pattern.origin }}
               </div>
             </div>
             <div class="d-flex flex-column align-end ga-1 flex-shrink-0">
@@ -60,7 +60,7 @@
           <div class="d-flex align-center ga-3 text-caption text-medium-emphasis">
             <span>
               <v-icon icon="mdi-account-outline" size="12" class="mr-1" />
-              {{ pattern.designer }}
+              {{ pattern.digitizedBy }}
             </span>
             <span>
               <v-icon icon="mdi-calendar-check-outline" size="12" class="mr-1" />
@@ -100,9 +100,12 @@ function formatDate(dateStr: string): string {
 <style scoped>
 .pattern-list-item {
   transition: transform 0.15s ease, box-shadow 0.15s ease;
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
 }
 .pattern-list-item:hover {
   transform: translateX(4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25) !important;
 }
 .description-clamp {
   display: -webkit-box;

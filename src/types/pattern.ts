@@ -16,6 +16,7 @@ export interface Pattern {
   name: string
   year: number
   digitizedAt: string // ISO date string
+  digitizedBy: string
   designer: string
   origin: string
   technique: string

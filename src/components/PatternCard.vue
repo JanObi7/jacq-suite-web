@@ -63,8 +63,15 @@
 
     <v-card-actions class="pt-0">
       <div class="d-flex align-center ga-1 text-caption text-medium-emphasis">
+        <span>Digitalisiert: </span>
+      </div>
+      <div class="d-flex align-center ga-1 text-caption text-medium-emphasis">
+        <v-icon icon="mdi-account-outline" size="14" />
+        <span>{{ pattern.digitizedBy }}</span>
+      </div>
+      <div class="d-flex align-center ga-1 text-caption text-medium-emphasis">
         <v-icon icon="mdi-calendar-check-outline" size="14" />
-        <span>Digitalisiert: {{ formatDate(pattern.digitizedAt) }}</span>
+        <span>{{ formatDate(pattern.digitizedAt) }}</span>
       </div>
       <v-spacer />
       <v-icon icon="mdi-chevron-right" color="primary" />
@@ -100,8 +107,11 @@ function formatDate(dateStr: string): string {
 <style scoped>
 .pattern-card {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
 }
 .pattern-card:hover {
   transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25) !important;
 }
 </style>

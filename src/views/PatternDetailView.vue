@@ -158,16 +158,6 @@
                 <v-divider inset />
                 <v-list-item>
                   <template #prepend>
-                    <v-icon icon="mdi-calendar-check-outline" color="primary" size="20" />
-                  </template>
-                  <v-list-item-title class="text-caption text-medium-emphasis">Digitalisiert am</v-list-item-title>
-                  <v-list-item-subtitle class="text-body-2 font-weight-medium">
-                    {{ formatDate(pattern.digitizedAt) }}
-                  </v-list-item-subtitle>
-                </v-list-item>
-                <v-divider inset />
-                <v-list-item>
-                  <template #prepend>
                     <v-icon icon="mdi-account-outline" color="primary" size="20" />
                   </template>
                   <v-list-item-title class="text-caption text-medium-emphasis">Designer</v-list-item-title>
@@ -191,7 +181,7 @@
                 </v-list-item>
                 <v-list-item>
                   <template #prepend>
-                    <v-icon icon="mdi-cog-outline" color="primary" size="20" />
+                    <v-icon icon="mdi-arrow-all" color="primary" size="20" />
                   </template>
                   <v-list-item-title class="text-caption text-medium-emphasis">Größe</v-list-item-title>
                   <v-list-item-subtitle class="text-body-2 font-weight-medium">{{ pattern.width.toLocaleString('de-DE') }} × {{ pattern.height.toLocaleString('de-DE') }}</v-list-item-subtitle>
@@ -236,7 +226,7 @@
             </v-card>
 
             <!-- Tags -->
-            <v-card rounded="lg">
+            <v-card rounded="lg" class="mb-4">
               <v-card-title class="text-body-1 font-weight-bold">
                 <v-icon icon="mdi-tag-multiple-outline" class="mr-2" />
                 Tags
@@ -257,11 +247,40 @@
                 </div>
               </v-card-text>
             </v-card>
+
+            <!-- Digitalisierung -->
+            <v-card rounded="lg" class="mb-4">
+              <v-card-title class="text-body-1 font-weight-bold">
+                <v-icon icon="mdi-image-edit-outline" class="mr-2" />
+                Digitalisierung
+              </v-card-title>
+              <v-divider />
+              <v-list density="compact">
+                <v-list-item>
+                  <template #prepend>
+                    <v-icon icon="mdi-account-outline" color="primary" size="20" />
+                  </template>
+                  <v-list-item-title class="text-caption text-medium-emphasis">Digitalisiert von</v-list-item-title>
+                  <v-list-item-subtitle class="text-body-2 font-weight-medium">
+                    {{ pattern.digitizedBy }}
+                  </v-list-item-subtitle>
+                </v-list-item>
+                <v-list-item>
+                  <template #prepend>
+                    <v-icon icon="mdi-calendar-check-outline" color="primary" size="20" />
+                  </template>
+                  <v-list-item-title class="text-caption text-medium-emphasis">Digitalisiert am</v-list-item-title>
+                  <v-list-item-subtitle class="text-body-2 font-weight-medium">
+                    {{ formatDate(pattern.digitizedAt) }}
+                  </v-list-item-subtitle>
+                </v-list-item>
+              </v-list>
+            </v-card>
           </v-col>
         </v-row>
 
         <!-- Bildübersicht Tabelle -->
-        <v-card rounded="lg" class="mt-6">
+        <v-card rounded="lg">
           <v-card-title class="text-body-1 font-weight-bold">
             <v-icon icon="mdi-image-multiple-outline" class="mr-2" />
             Alle Bilder dieses Musters
@@ -324,7 +343,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { usePatternStore } from '@/stores/patternStore'
 import type { PatternImage, ImageRole } from '@/types/pattern'
@@ -341,7 +360,7 @@ onMounted(() => {
 
 const pattern = computed(() => store.getPatternById(route.params.id as string))
 
-const activeImage = ref<PatternImage>(
+const activeImage = ref<PatternImage|undefined>(
   pattern.value?.images.find((img) => img.role === 'thumbnail') ??
     pattern.value?.images[0] ?? {
       id: '',
@@ -351,6 +370,10 @@ const activeImage = ref<PatternImage>(
       label: '',
     },
 )
+
+watch(pattern, async (newPattern, oldPattern) => {
+  activeImage.value = pattern.value?.images.find((img) => img.role === 'thumbnail')
+})
 
 const highResCount = computed(
   () => pattern.value?.images.filter((img) => img.isHighResolution).length ?? 0,
