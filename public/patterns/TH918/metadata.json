@@ -1,16 +1,17 @@
 {
   "id": "TH918",
-  "name": "Muster TH918",
-  "year": 1935,
-  "digitizedAt": "2026-02-20",
+  "name": "TH918",
+  "year": 1969,
+  "digitizedAt": "2025-11-22",
+  "digitizedBy": "Jan Obermüller",
   "designer": "Tannenhauer",
   "origin": "Deutschland",
   "technique": "Jacquard-Gewebe",
   "width": 440,
   "height": 96,
-  "colors": ["Blau", "Weiß", "Grau"],
-  "description": "Klassisches Jacquard-Muster aus den 1930er Jahren mit geometrischen Elementen.",
-  "tags": ["Geometrisch", "Klassisch"],
+  "colors": ["Rot", "Weiß", "Grau"],
+  "description": "Regelmäßiges, geometrisches Muster.",
+  "tags": [],
   "images": [
     {
       "id": "TH918-1",
@@ -30,7 +31,7 @@
       "label": "Papiervorlage",
       "width": 2000,
       "height": 1500,
-      "isHighResolution": false
+      "isHighResolution": true
     },
     {
       "id": "TH918-3",
