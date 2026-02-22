@@ -2,14 +2,14 @@
   "id": "D913",
   "name": "D913",
   "year": 1978,
-  "digitizedAt": "2026-02-21",
+  "digitizedAt": "2025-04-13",
   "designer": "Tannenhauer",
   "origin": "Braunsdorf, Deutschland",
   "technique": "Jacquard-Gewebe",
   "width": 588,
   "height": 144,
   "colors": ["Weiß", "Rot"],
-  "description": "Elegantes Rosenmuster, das die Leichtigkeit und Eleganz des Stoffes betont.",
+  "description": "Elegantes Rosenmuster.",
   "tags": ["Rosen", "Floral"],
   "images": [
     {
@@ -24,23 +24,23 @@
     },
     {
       "id": "D913-2",
-      "url": "/jacq-suite-web/patterns/D913/design_scan_small.jpg",
-      "thumbnailUrl": "/jacq-suite-web/patterns/D913/design_scan_small.jpg",
+      "url": "/jacq-suite-web/patterns/D913/00000362.tif.original.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D913/00000362.tif.thumb.jpg",
       "role": "paper_template",
       "label": "Papiervorlage",
-      "width": 1000,
-      "height": 731,
-      "isHighResolution": false
+      "width": 8000,
+      "height": 5900,
+      "isHighResolution": true
     },
     {
       "id": "D913-3",
-      "url": "/jacq-suite-web/patterns/D913/design_full_small.png",
-      "thumbnailUrl": "/jacq-suite-web/patterns/D913/design_full_small.png",
+      "url": "/jacq-suite-web/patterns/D913/design.full.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D913/design.thumb.png",
       "role": "digital_pattern",
       "label": "Digitales Muster",
-      "width": 1000,
-      "height": 610,
-      "isHighResolution": false
+      "width": 4000,
+      "height": 2400,
+      "isHighResolution": true
     }
   ]
 }
