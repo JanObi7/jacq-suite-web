@@ -1,0 +1,35 @@
+# Projekt-Regeln: Vue 3 / Vuetify 3 (Statische SPA)
+
+## Technologie-Stack
+- Framework: Vue 3 (Composition API mit <script setup>)
+- UI-Library: Vuetify 3
+- Build-Tool: Vite
+- State Management: Pinia (da keine Backend-Anbindung, dient Pinia als Single Source of Truth)
+- Routing: Vue Router
+- Icons: Material Design Icons (mdi)
+
+## Architektur & Struktur
+- Kompakt-Prinzip: Da es eine SPA ohne Backend ist, wird die Geschäftslogik in Pinia Stores oder Composables ausgelagert.
+- Datei-Struktur: 
+  - `/src/components`: Wiederverwendbare UI-Elemente.
+  - `/src/views`: Hauptseiten (Routen).
+  - `/src/stores`: Pinia Stores für Datenhaltung.
+  - `/src/composables`: Logik, die über mehrere Komponenten geteilt wird.
+  - `/src/plugins`: Vuetify-Konfiguration und andere Plugins.
+
+## Coding-Standards (Vue & Vuetify)
+- Composition API: Nutze ausschließlich `<script setup>`.
+- Vuetify-Komponenten: Verwende konsequent Vuetify-Komponenten (`v-btn`, `v-card`, `v-container` etc.) anstatt native HTML-Elemente, um das Design konsistent zu halten.
+- Grid-System: Nutze das Vuetify Grid (`v-row`, `v-col`) für das Layout.
+- Props & Emits: Definiere `defineProps` und `defineEmits` mit TypeScript-Interfaces.
+
+## Besonderheiten für Statisches Hosting
+- Da kein Backend existiert: Datenabfragen (falls nötig) über den `/public` Ordner.
+- Assets: Bilder und statische Dateien konsequent über den `/public` Ordner.
+- Routing: Nutze `createWebHistory` oder `createWebHashHistory` (je nach Hoster-Support für SPA-Redirects).
+
+## Performance & Clean Code
+- Nutze Vuetify's "Treeshaking" (automatisch durch Vite-Plugin), um das Bundle klein zu halten.
+- Vermeide unnötige Reaktivität; nutze `shallowRef`, wenn große Objekte nicht tief-reaktiv sein müssen.
+- Benenne Komponenten im PascalCase (z.B. `UserDashboard.vue`).
+- Starte keinen Entwicklungsserver und öffnen am Ende eines Task nicht das Projekt im Browser
