@@ -1,0 +1,46 @@
+{
+  "id": "D1724",
+  "name": "Muster D1724",
+  "year": 1930,
+  "digitizedAt": "2026-02-17",
+  "designer": "Unbekannt",
+  "origin": "Deutschland",
+  "technique": "Jacquard-Gewebe",
+  "width": 2800,
+  "height": 2100,
+  "colors": ["Rot", "Schwarz", "Weiß"],
+  "description": "Kraftvolles Jacquard-Muster aus den frühen 1930er Jahren mit geometrischen Formen.",
+  "tags": ["Geometrisch", "Modern"],
+  "images": [
+    {
+      "id": "D1724-1",
+      "url": "/jacq-suite-web/patterns/D1724/thumbnail.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D1724/thumbnail.png",
+      "role": "thumbnail",
+      "label": "Symbolbild",
+      "width": 512,
+      "height": 512,
+      "isHighResolution": false
+    },
+    {
+      "id": "D1724-2",
+      "url": "/jacq-suite-web/patterns/D1724/design_scan_small.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D1724/design_scan_small.jpg",
+      "role": "paper_template",
+      "label": "Papiervorlage",
+      "width": 800,
+      "height": 600,
+      "isHighResolution": false
+    },
+    {
+      "id": "D1724-3",
+      "url": "/jacq-suite-web/patterns/D1724/design_full_small.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D1724/thumbnail.png",
+      "role": "digital_pattern",
+      "label": "Digitales Muster",
+      "width": 16500,
+      "height": 12500,
+      "isHighResolution": true
+    }
+  ]
+}

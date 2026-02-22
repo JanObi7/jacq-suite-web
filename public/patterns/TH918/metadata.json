@@ -1,0 +1,46 @@
+{
+  "id": "TH918",
+  "name": "Muster TH918",
+  "year": 1935,
+  "digitizedAt": "2026-02-20",
+  "designer": "Tannenhauer",
+  "origin": "Deutschland",
+  "technique": "Jacquard-Gewebe",
+  "width": 440,
+  "height": 96,
+  "colors": ["Blau", "Weiß", "Grau"],
+  "description": "Klassisches Jacquard-Muster aus den 1930er Jahren mit geometrischen Elementen.",
+  "tags": ["Geometrisch", "Klassisch"],
+  "images": [
+    {
+      "id": "TH918-1",
+      "url": "/jacq-suite-web/patterns/TH918/symbol.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/TH918/symbol.png",
+      "role": "thumbnail",
+      "label": "Symbolbild",
+      "width": 512,
+      "height": 512,
+      "isHighResolution": false
+    },
+    {
+      "id": "TH918-2",
+      "url": "/jacq-suite-web/patterns/TH918/00000398.tif.original.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/TH918/00000398.tif.thumb.jpg",
+      "role": "paper_template",
+      "label": "Papiervorlage",
+      "width": 2000,
+      "height": 1500,
+      "isHighResolution": false
+    },
+    {
+      "id": "TH918-3",
+      "url": "/jacq-suite-web/patterns/TH918/design.full.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/TH918/design.thumb.png",
+      "role": "digital_pattern",
+      "label": "Digitales Muster",
+      "width": 18000,
+      "height": 14000,
+      "isHighResolution": true
+    }
+  ]
+}

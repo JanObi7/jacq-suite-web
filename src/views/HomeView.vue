@@ -113,10 +113,16 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { usePatternStore } from '@/stores/patternStore'
 import PatternCard from '@/components/PatternCard.vue'
 
 const store = usePatternStore()
+
+// Daten beim Mounten laden
+onMounted(() => {
+  store.loadPatterns()
+})
 </script>
 
 <style scoped>

@@ -180,7 +180,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { usePatternStore } from '@/stores/patternStore'
 import PatternCard from '@/components/PatternCard.vue'
 import PatternListItem from '@/components/PatternListItem.vue'
@@ -188,6 +188,11 @@ import PatternListItem from '@/components/PatternListItem.vue'
 const store = usePatternStore()
 const viewMode = ref<'grid' | 'list'>('grid')
 const sortBy = ref('digitizedAt_desc')
+
+// Daten beim Mounten laden
+onMounted(() => {
+  store.loadPatterns()
+})
 
 const sortOptions = [
   { label: 'Neueste zuerst', value: 'digitizedAt_desc' },

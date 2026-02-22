@@ -1,16 +1,60 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Pattern } from '@/types/pattern'
-import { mockPatterns } from '@/data/mockPatterns'
 
 export const usePatternStore = defineStore('patterns', () => {
-  const patterns = ref<Pattern[]>(mockPatterns)
+  const patterns = ref<Pattern[]>([])
+  const isLoading = ref(false)
+  const loadError = ref<string | null>(null)
   const searchQuery = ref('')
   const filterDesigner = ref('')
   const filterTechnique = ref('')
   const filterYearFrom = ref<number | null>(null)
   const filterYearTo = ref<number | null>(null)
   const filterTags = ref<string[]>([])
+
+  // Dynamisches Laden der Pattern-Daten
+  async function loadPatterns() {
+    if (patterns.value.length > 0) return // Bereits geladen
+    
+    isLoading.value = true
+    loadError.value = null
+    
+    try {
+      // 1. Index-Datei laden
+      const indexResponse = await fetch('/jacq-suite-web/patterns/index.json')
+      if (!indexResponse.ok) {
+        throw new Error('Konnte Pattern-Index nicht laden')
+      }
+      const indexData = await indexResponse.json()
+      const patternIds: string[] = indexData.patterns
+      
+      // 2. Alle Pattern-Metadaten parallel laden
+      const patternPromises = patternIds.map(async (id) => {
+        try {
+          const response = await fetch(`/jacq-suite-web/patterns/${id}/metadata.json`)
+          if (!response.ok) {
+            console.warn(`Konnte Metadaten für Pattern ${id} nicht laden`)
+            return null
+          }
+          return await response.json()
+        } catch (error) {
+          console.warn(`Fehler beim Laden von Pattern ${id}:`, error)
+          return null
+        }
+      })
+      
+      const loadedPatterns = await Promise.all(patternPromises)
+      patterns.value = loadedPatterns.filter((p): p is Pattern => p !== null)
+      
+      console.log(`${patterns.value.length} Muster erfolgreich geladen`)
+    } catch (error) {
+      loadError.value = error instanceof Error ? error.message : 'Unbekannter Fehler'
+      console.error('Fehler beim Laden der Muster:', error)
+    } finally {
+      isLoading.value = false
+    }
+  }
 
   // Alle verfügbaren Designer (für Filter-Dropdown)
   const allDesigners = computed(() =>
@@ -77,6 +121,8 @@ export const usePatternStore = defineStore('patterns', () => {
 
   return {
     patterns,
+    isLoading,
+    loadError,
     searchQuery,
     filterDesigner,
     filterTechnique,
@@ -88,6 +134,7 @@ export const usePatternStore = defineStore('patterns', () => {
     allTags,
     filteredPatterns,
     latestPatterns,
+    loadPatterns,
     getPatternById,
     resetFilters,
   }

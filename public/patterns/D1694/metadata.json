@@ -1,0 +1,46 @@
+{
+  "id": "D1694",
+  "name": "D1694",
+  "year": 1925,
+  "digitizedAt": "2025-02-22",
+  "designer": "Tannenhauer",
+  "origin": "Deutschland",
+  "technique": "Jacquard-Gewebe",
+  "width": 1320,
+  "height": 1200,
+  "colors": ["Grün", "Beige", "Braun"],
+  "description": "Flächiges Ornamentmuster mit komplexer 3-fach Bindungsvorschrift.",
+  "tags": ["Ornament"],
+  "images": [
+    {
+      "id": "D1694-1",
+      "url": "/jacq-suite-web/patterns/D1694/symbol.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D1694/symbol.png",
+      "role": "thumbnail",
+      "label": "Symbolbild",
+      "width": 512,
+      "height": 512,
+      "isHighResolution": false
+    },
+    {
+      "id": "D1694-2",
+      "url": "/jacq-suite-web/patterns/D1694/design_scan_small.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D1694/design_scan_small.jpg",
+      "role": "paper_template",
+      "label": "Papiervorlage",
+      "width": 800,
+      "height": 600,
+      "isHighResolution": false
+    },
+    {
+      "id": "D1694-3",
+      "url": "/jacq-suite-web/patterns/D1694/design_full_small.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D1694/design_full_small.png",
+      "role": "digital_pattern",
+      "label": "Digitales Muster",
+      "width": 15500,
+      "height": 11000,
+      "isHighResolution": false
+    }
+  ]
+}

@@ -324,14 +324,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { usePatternStore } from '@/stores/patternStore'
 import type { PatternImage, ImageRole } from '@/types/pattern'
 import ImageViewer from '@/components/ImageViewer.vue'
 
 const route = useRoute()
+const router = useRouter()
 const store = usePatternStore()
+
+// Daten beim Mounten laden
+onMounted(() => {
+  store.loadPatterns()
+})
 
 const pattern = computed(() => store.getPatternById(route.params.id as string))
 

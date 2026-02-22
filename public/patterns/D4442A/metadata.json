@@ -1,0 +1,46 @@
+{
+  "id": "D4442A",
+  "name": "Muster D4442A",
+  "year": 1940,
+  "digitizedAt": "2026-02-15",
+  "designer": "Unbekannt",
+  "origin": "Deutschland",
+  "technique": "Jacquard-Gewebe",
+  "width": 2600,
+  "height": 1900,
+  "colors": ["Blau", "Silber", "Weiß"],
+  "description": "Elegantes Jacquard-Muster aus den 1940er Jahren mit feinen Details.",
+  "tags": ["Elegant", "Fein"],
+  "images": [
+    {
+      "id": "D4442A-1",
+      "url": "/jacq-suite-web/patterns/D4442A/symbol.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D4442A/symbol.png",
+      "role": "thumbnail",
+      "label": "Symbolbild",
+      "width": 512,
+      "height": 512,
+      "isHighResolution": false
+    },
+    {
+      "id": "D4442A-2",
+      "url": "/jacq-suite-web/patterns/D4442A/design_scan_small.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D4442A/design_scan_small.jpg",
+      "role": "paper_template",
+      "label": "Papiervorlage",
+      "width": 800,
+      "height": 600,
+      "isHighResolution": false
+    },
+    {
+      "id": "D4442A-3",
+      "url": "/jacq-suite-web/patterns/D4442A/design_full_small.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D4442A/symbol.png",
+      "role": "digital_pattern",
+      "label": "Digitales Muster",
+      "width": 17500,
+      "height": 13500,
+      "isHighResolution": true
+    }
+  ]
+}

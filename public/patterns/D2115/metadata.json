@@ -1,0 +1,46 @@
+{
+  "id": "D2115",
+  "name": "Muster D2115",
+  "year": 1932,
+  "digitizedAt": "2026-02-16",
+  "designer": "Unbekannt",
+  "origin": "Deutschland",
+  "technique": "Jacquard-Gewebe",
+  "width": 3200,
+  "height": 2400,
+  "colors": ["Grün", "Gelb", "Braun"],
+  "description": "Naturinspiriertes Jacquard-Muster aus den 1930er Jahren mit organischen Formen.",
+  "tags": ["Natur", "Organisch"],
+  "images": [
+    {
+      "id": "D2115-1",
+      "url": "/jacq-suite-web/patterns/D2115/symbol.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D2115/symbol.png",
+      "role": "thumbnail",
+      "label": "Symbolbild",
+      "width": 512,
+      "height": 512,
+      "isHighResolution": false
+    },
+    {
+      "id": "D2115-2",
+      "url": "/jacq-suite-web/patterns/D2115/design_scan_small.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D2115/design_scan_small.jpg",
+      "role": "paper_template",
+      "label": "Papiervorlage",
+      "width": 800,
+      "height": 600,
+      "isHighResolution": false
+    },
+    {
+      "id": "D2115-3",
+      "url": "/jacq-suite-web/patterns/D2115/design_full_small.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D2115/symbol.png",
+      "role": "digital_pattern",
+      "label": "Digitales Muster",
+      "width": 18000,
+      "height": 14000,
+      "isHighResolution": true
+    }
+  ]
+}
