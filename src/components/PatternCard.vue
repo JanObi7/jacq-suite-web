@@ -81,11 +81,12 @@ const props = defineProps<{
 }>()
 
 const thumbnailImage = computed(
-  () =>
-    props.pattern.images.find((img) => img.role === 'thumbnail') ?? props.pattern.images[0],
+  () => props.pattern.images.find((img) => img.role === 'thumbnail') ?? props.pattern.images[0],
 )
 
-const hasHighResImage = computed(() => props.pattern.images.some((img) => img.isHighResolution))
+const hasHighResImage = computed(
+  () => props.pattern.images.some((img) => img.isHighResolution)
+)
 
 function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString('de-DE', {
