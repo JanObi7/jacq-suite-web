@@ -64,17 +64,11 @@ watch(dialog, async (open) => {
     if (osdContainer.value && !viewer) {
       viewer = OpenSeadragon({
         element: osdContainer.value,
-        tileSources: {
-          type: 'image',
-          url: props.image.url,
-        },
+        prefixUrl: "/jacq-suite-web/openseadragon/images/",
+        tileSources: props.image.url.endsWith(".dzi") ? props.image.url : {type: 'image', url: props.image.url },
         showNavigationControl: true,
         showNavigator: true,
         navigatorPosition: 'BOTTOM_RIGHT',
-        zoomInButton: 'zoom-in',
-        zoomOutButton: 'zoom-out',
-        homeButton: 'home',
-        fullPageButton: 'full-page',
         animationTime: 0.5,
         blendTime: 0.1,
         constrainDuringPan: true,
