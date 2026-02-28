@@ -1,0 +1,57 @@
+{
+  "id": "D955",
+  "name": "D955",
+  "year": 1960,
+  "digitizedAt": "2025-12-06",
+  "digitizedBy": "Jan Obermüller",
+  "designer": "Tannenhauer",
+  "origin": "Braunsdorf, Deutschland",
+  "technique": "Jacquard-Gewebe",
+  "width": 880,
+  "height": 680,
+  "colors": ["Rot", "Weiß"],
+  "description": "Abstraktes, geometrisches Muster.",
+  "tags": [],
+  "images": [
+    {
+      "id": "D955-1",
+      "url": "/jacq-suite-web/patterns/D955/symbol.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D955/symbol.png",
+      "role": "thumbnail",
+      "label": "Symbolbild",
+      "width": 512,
+      "height": 512,
+      "isHighResolution": false
+    },
+    {
+      "id": "D955-2",
+      "url": "/jacq-suite-web/patterns/D955/00000058.tif.original.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D955/00000058.tif.thumb.jpg",
+      "role": "paper_template",
+      "label": "Papiervorlage",
+      "width": 12284,
+      "height": 16593,
+      "isHighResolution": true
+    },
+    {
+      "id": "D955-3",
+      "url": "/jacq-suite-web/patterns/D955/00000059.tif.original.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D955/00000059.tif.thumb.jpg",
+      "role": "paper_template",
+      "label": "Papiervorlage",
+      "width": 12253,
+      "height": 12513,
+      "isHighResolution": true
+    },
+    {
+      "id": "D955-4",
+      "url": "/jacq-suite-web/patterns/D955/design.full.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D955/design.thumb.png",
+      "role": "digital_pattern",
+      "label": "Digitales Muster",
+      "width": 4800,
+      "height": 11280,
+      "isHighResolution": true
+    }
+  ]
+}

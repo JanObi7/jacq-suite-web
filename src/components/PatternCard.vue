@@ -63,9 +63,6 @@
 
     <v-card-actions class="pt-0">
       <div class="d-flex align-center ga-1 text-caption text-medium-emphasis">
-        <span>Digitalisiert: </span>
-      </div>
-      <div class="d-flex align-center ga-1 text-caption text-medium-emphasis">
         <v-icon icon="mdi-account-outline" size="14" />
         <span>{{ pattern.digitizedBy }}</span>
       </div>

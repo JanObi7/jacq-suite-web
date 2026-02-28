@@ -1,0 +1,47 @@
+{
+  "id": "D970",
+  "name": "D970",
+  "year": 1971,
+  "digitizedAt": "2025-11-12",
+  "digitizedBy": "Raphael Reh",
+  "designer": "Tannenhauer",
+  "origin": "Braunsdorf, Deutschland",
+  "technique": "Jacquard-Gewebe",
+  "width": 496,
+  "height": 40,
+  "colors": ["Rot", "Weiß"],
+  "description": "Abstraktes, geometrisches Muster.",
+  "tags": [],
+  "images": [
+    {
+      "id": "D970-1",
+      "url": "/jacq-suite-web/patterns/D970/symbol.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D970/symbol.png",
+      "role": "thumbnail",
+      "label": "Symbolbild",
+      "width": 512,
+      "height": 512,
+      "isHighResolution": false
+    },
+    {
+      "id": "D970-2",
+      "url": "/jacq-suite-web/patterns/D970/00000146.tif.original.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D970/00000146.tif.thumb.jpg",
+      "role": "paper_template",
+      "label": "Papiervorlage",
+      "width": 6906,
+      "height": 4932,
+      "isHighResolution": true
+    },
+    {
+      "id": "D970-3",
+      "url": "/jacq-suite-web/patterns/D970/design.full.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D970/design.thumb.png",
+      "role": "digital_pattern",
+      "label": "Digitales Muster",
+      "width": 2384,
+      "height": 1040,
+      "isHighResolution": true
+    }
+  ]
+}

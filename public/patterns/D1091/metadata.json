@@ -1,0 +1,47 @@
+{
+  "id": "D1091",
+  "name": "D1091",
+  "year": 1957,
+  "digitizedAt": "2025-11-19",
+  "digitizedBy": "Julius Leistner",
+  "designer": "Tannenhauer",
+  "origin": "Braunsdorf, Deutschland",
+  "technique": "Jacquard-Gewebe",
+  "width": 220,
+  "height": 60,
+  "colors": ["Rot", "Weiß"],
+  "description": "Abstraktes, organisches Muster.",
+  "tags": [],
+  "images": [
+    {
+      "id": "D1091-1",
+      "url": "/jacq-suite-web/patterns/D1091/symbol.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D1091/symbol.png",
+      "role": "thumbnail",
+      "label": "Symbolbild",
+      "width": 512,
+      "height": 512,
+      "isHighResolution": false
+    },
+    {
+      "id": "D1091-2",
+      "url": "/jacq-suite-web/patterns/D1091/00000026.tif.original.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D1091/00000026.tif.thumb.jpg",
+      "role": "paper_template",
+      "label": "Papiervorlage",
+      "width": 6627,
+      "height": 3741,
+      "isHighResolution": true
+    },
+    {
+      "id": "D1091-3",
+      "url": "/jacq-suite-web/patterns/D1091/design.full.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D1091/design.thumb.png",
+      "role": "digital_pattern",
+      "label": "Digitales Muster",
+      "width": 3040,
+      "height": 1720,
+      "isHighResolution": true
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "id": "D937",
+  "name": "D937",
+  "year": 1965,
+  "digitizedAt": "2025-11-10",
+  "digitizedBy": "Thees Ilgen",
+  "designer": "Tannenhauer",
+  "origin": "Braunsdorf, Deutschland",
+  "technique": "Jacquard-Gewebe",
+  "width": 24,
+  "height": 120,
+  "colors": ["Rot", "Weiß"],
+  "description": "Regelmäßiges, geometrisches Muster.",
+  "tags": [],
+  "images": [
+    {
+      "id": "D937-1",
+      "url": "/jacq-suite-web/patterns/D937/symbol.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D937/symbol.png",
+      "role": "thumbnail",
+      "label": "Symbolbild",
+      "width": 512,
+      "height": 512,
+      "isHighResolution": false
+    },
+    {
+      "id": "D937-2",
+      "url": "/jacq-suite-web/patterns/D937/00000393.tif.original.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D937/00000393.tif.thumb.jpg",
+      "role": "paper_template",
+      "label": "Papiervorlage",
+      "width": 2000,
+      "height": 1500,
+      "isHighResolution": true
+    },
+    {
+      "id": "D937-3",
+      "url": "/jacq-suite-web/patterns/D937/design.full.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D937/design.thumb.png",
+      "role": "digital_pattern",
+      "label": "Digitales Muster",
+      "width": 6887,
+      "height": 8673,
+      "isHighResolution": true
+    }
+  ]
+}

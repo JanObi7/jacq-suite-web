@@ -1,0 +1,47 @@
+{
+  "id": "D1003",
+  "name": "D1003",
+  "year": 0,
+  "digitizedAt": "2025-11-19",
+  "digitizedBy": "Kristina Pal",
+  "designer": "Tannenhauer",
+  "origin": "Braunsdorf, Deutschland",
+  "technique": "Jacquard-Gewebe",
+  "width": 448,
+  "height": 75,
+  "colors": ["Rot", "Weiß"],
+  "description": "Abstraktes, geometrisches Muster.",
+  "tags": [],
+  "images": [
+    {
+      "id": "D1003-1",
+      "url": "/jacq-suite-web/patterns/D1003/symbol.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D1003/symbol.png",
+      "role": "thumbnail",
+      "label": "Symbolbild",
+      "width": 512,
+      "height": 512,
+      "isHighResolution": false
+    },
+    {
+      "id": "D1003-2",
+      "url": "/jacq-suite-web/patterns/D1003/00000078.tif.original.jpg",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D1003/00000078.tif.thumb.jpg",
+      "role": "paper_template",
+      "label": "Papiervorlage",
+      "width": 6870,
+      "height": 4563,
+      "isHighResolution": true
+    },
+    {
+      "id": "D1003-3",
+      "url": "/jacq-suite-web/patterns/D1003/design.full.png",
+      "thumbnailUrl": "/jacq-suite-web/patterns/D1003/design.thumb.png",
+      "role": "digital_pattern",
+      "label": "Digitales Muster",
+      "width": 2640,
+      "height": 1600,
+      "isHighResolution": true
+    }
+  ]
+}
