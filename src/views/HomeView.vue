@@ -73,13 +73,13 @@
     </v-container>
 
     <!-- Info Section -->
-    <v-sheet color="surface-variant" class="py-8">
+    <v-sheet color="secondary">
       <v-container>
         <v-row>
           <v-col cols="12" md="4">
-            <div class="d-flex flex-column align-center text-center pa-4">
-              <v-icon icon="mdi-magnify-scan" size="48" color="primary" class="mb-3" />
-              <h3 class="text-h6 font-weight-bold mb-2">Hochauflösende Bilder</h3>
+            <div class="d-flex flex-column align-center text-center pa-2">
+              <v-icon icon="mdi-magnify-scan" size="32" color="white" class="mb-3" />
+              <h4 class="text-h6 font-weight-bold mb-2">Hochauflösende Bilder</h4>
               <p class="text-body-2 text-medium-emphasis">
                 Interaktive Detailansicht für Bilder mit über 15.000 × 10.000 Pixeln – zoomen und
                 erkunden Sie jedes Detail.
@@ -87,9 +87,9 @@
             </div>
           </v-col>
           <v-col cols="12" md="4">
-            <div class="d-flex flex-column align-center text-center pa-4">
-              <v-icon icon="mdi-filter-variant" size="48" color="primary" class="mb-3" />
-              <h3 class="text-h6 font-weight-bold mb-2">Umfangreiche Filter</h3>
+            <div class="d-flex flex-column align-center text-center pa-2">
+              <v-icon icon="mdi-filter-variant" size="32" color="white" class="mb-3" />
+              <h4 class="text-h6 font-weight-bold mb-2">Umfangreiche Filter</h4>
               <p class="text-body-2 text-medium-emphasis">
                 Filtern Sie nach Designer, Technik, Entstehungsjahr und Tags – finden Sie genau das
                 Muster, das Sie suchen.
@@ -97,9 +97,9 @@
             </div>
           </v-col>
           <v-col cols="12" md="4">
-            <div class="d-flex flex-column align-center text-center pa-4">
-              <v-icon icon="mdi-information-outline" size="48" color="primary" class="mb-3" />
-              <h3 class="text-h6 font-weight-bold mb-2">Vollständige Metadaten</h3>
+            <div class="d-flex flex-column align-center text-center pa-2">
+              <v-icon icon="mdi-information-outline" size="32" color="white" class="mb-3" />
+              <h4 class="text-h6 font-weight-bold mb-2">Vollständige Metadaten</h4>
               <p class="text-body-2 text-medium-emphasis">
                 Jedes Muster enthält umfangreiche Metainformationen: Entstehungsjahr, Designer,
                 Herkunft, Technik und mehr.
