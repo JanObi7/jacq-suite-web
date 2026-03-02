@@ -90,7 +90,7 @@ const thumbnailUrl = computed(
   }
 )
 
-const hasHighResImage = computed(() => images.some((img) => img.isHighResolution))
+const hasHighResImage = computed(() => images.some((img) => img.highres))
 
 function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString('de-DE', {
