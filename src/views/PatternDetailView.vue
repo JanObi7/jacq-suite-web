@@ -24,7 +24,7 @@
           >
             Alle Muster
           </v-btn>
-          <h1 class="text-h4 font-weight-bold mb-1">{{ pattern.name }}</h1>
+          <h1 class="text-h4 font-weight-bold mb-1">{{ pattern.title }}</h1>
           <div class="d-flex align-center ga-3 flex-wrap opacity-80 text-body-2">
             <span>
               <v-icon icon="mdi-calendar-outline" size="16" class="mr-1" />
@@ -36,7 +36,7 @@
             </span>
             <span>
               <v-icon icon="mdi-map-marker-outline" size="16" class="mr-1" />
-              {{ pattern.origin }}
+              {{ pattern.location }}
             </span>
           </div>
         </v-container>
@@ -93,7 +93,7 @@
             </v-card>
 
             <!-- Bildergalerie (Thumbnails) -->
-            <div class="d-flex flex-wrap ga-2">
+            <!-- <div class="d-flex flex-wrap ga-2">
               <v-card
                 v-for="img in pattern.images"
                 :key="img.id"
@@ -123,7 +123,7 @@
                   />
                 </div>
               </v-card>
-            </div>
+            </div> -->
           </v-col>
 
           <!-- Rechte Spalte: Metadaten -->
@@ -169,7 +169,7 @@
                     <v-icon icon="mdi-map-marker-outline" color="primary" size="20" />
                   </template>
                   <v-list-item-title class="text-caption text-medium-emphasis">Herkunft</v-list-item-title>
-                  <v-list-item-subtitle class="text-body-2 font-weight-medium">{{ pattern.origin }}</v-list-item-subtitle>
+                  <v-list-item-subtitle class="text-body-2 font-weight-medium">{{ pattern.location }}</v-list-item-subtitle>
                 </v-list-item>
                 <v-divider inset />
                 <v-list-item>
@@ -180,15 +180,15 @@
                   <v-list-item-subtitle class="text-body-2 font-weight-medium">{{ pattern.technique }}</v-list-item-subtitle>
                 </v-list-item>
                 <v-divider inset />
-                <v-list-item>
+                <!-- <v-list-item>
                   <template #prepend>
                     <v-icon icon="mdi-arrow-all" color="primary" size="20" />
                   </template>
                   <v-list-item-title class="text-caption text-medium-emphasis">Größe</v-list-item-title>
                   <v-list-item-subtitle class="text-body-2 font-weight-medium">{{ pattern.width.toLocaleString('de-DE') }} × {{ pattern.height.toLocaleString('de-DE') }}</v-list-item-subtitle>
-                </v-list-item>
+                </v-list-item> -->
                 
-                <v-divider inset />
+                <!-- <v-divider inset />
                 <v-list-item>
                   <template #prepend>
                     <v-icon icon="mdi-image-multiple-outline" color="primary" size="20" />
@@ -200,12 +200,12 @@
                       ({{ highResCount }} HD)
                     </span>
                   </v-list-item-subtitle>
-                </v-list-item>
+                </v-list-item> -->
               </v-list>
             </v-card>
 
             <!-- Farben -->
-            <v-card rounded="lg" class="mb-4">
+            <!-- <v-card rounded="lg" class="mb-4">
               <v-card-title class="text-body-1 font-weight-bold">
                 <v-icon icon="mdi-palette-outline" class="mr-2" />
                 Farben
@@ -224,10 +224,10 @@
                   </v-chip>
                 </div>
               </v-card-text>
-            </v-card>
+            </v-card> -->
 
             <!-- Tags -->
-            <v-card rounded="lg" class="mb-4">
+            <!-- <v-card rounded="lg" class="mb-4">
               <v-card-title class="text-body-1 font-weight-bold">
                 <v-icon icon="mdi-tag-multiple-outline" class="mr-2" />
                 Tags
@@ -247,7 +247,7 @@
                   </v-chip>
                 </div>
               </v-card-text>
-            </v-card>
+            </v-card> -->
 
             <!-- Digitalisierung -->
             <v-card rounded="lg" class="mb-4">
@@ -263,7 +263,7 @@
                   </template>
                   <v-list-item-title class="text-caption text-medium-emphasis">Digitalisiert von</v-list-item-title>
                   <v-list-item-subtitle class="text-body-2 font-weight-medium">
-                    {{ pattern.digitizedBy }}
+                    {{ pattern.digitized_by }}
                   </v-list-item-subtitle>
                 </v-list-item>
                 <v-divider inset />
@@ -273,7 +273,7 @@
                   </template>
                   <v-list-item-title class="text-caption text-medium-emphasis">Digitalisiert am</v-list-item-title>
                   <v-list-item-subtitle class="text-body-2 font-weight-medium">
-                    {{ formatDate(pattern.digitizedAt) }}
+                    {{ formatDate(pattern.digitized_at) }}
                   </v-list-item-subtitle>
                 </v-list-item>
               </v-list>
@@ -282,7 +282,7 @@
         </v-row>
 
         <!-- Bildübersicht Tabelle -->
-        <v-card rounded="lg">
+        <!-- <v-card rounded="lg">
           <v-card-title class="text-body-1 font-weight-bold">
             <v-icon icon="mdi-image-multiple-outline" class="mr-2" />
             Alle Bilder dieses Musters
@@ -338,7 +338,7 @@
               </tr>
             </tbody>
           </v-table>
-        </v-card>
+        </v-card> -->
       </v-container>
     </template>
   </v-container>
@@ -362,30 +362,33 @@ onMounted(() => {
 
 const pattern = computed(() => store.getPatternById(route.params.id as string))
 
+const images = <PatternImage[]>[]
+
 const activeImage = ref<PatternImage>(
-  pattern.value?.images.find((img) => img.role === 'thumbnail') ??
-    pattern.value?.images[0] ?? {
+  images.find((img) => img.role === 'thumbnail') ??
+    images[0] ?? {
       id: '',
       url: '',
-      thumbnailUrl: '',
+      thumbnailUrl: <string>pattern.value?.thumbnail_url,
       role: 'other',
       label: '',
     },
 )
 
 watch(pattern, async (newPattern, oldPattern) => {
-  activeImage.value = pattern.value?.images.find((img) => img.role === 'thumbnail') ??
-    pattern.value?.images[0] ?? {
+  const images = <PatternImage[]>[]
+  activeImage.value = images.find((img) => img.role === 'thumbnail') ??
+    images[0] ?? {
       id: '',
       url: '',
-      thumbnailUrl: '',
+      thumbnailUrl: <string>pattern.value?.thumbnail_url,
       role: 'other',
       label: '',
     }
 })
 
 const highResCount = computed(
-  () => pattern.value?.images.filter((img) => img.isHighResolution).length ?? 0,
+  () => 0 //pattern.value?.images.filter((img) => img.isHighResolution).length ?? 0,
 )
 
 function formatDate(dateStr: string): string {

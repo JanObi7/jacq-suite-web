@@ -13,17 +13,14 @@ export interface PatternImage {
 
 export interface Pattern {
   id: string
-  name: string
-  year: number
-  digitizedAt: string // ISO date string
-  digitizedBy: string
-  designer: string
-  origin: string
-  technique: string
-  width: number
-  height: number
-  colors: string[]
+  title: string
   description: string
-  tags: string[]
-  images: PatternImage[]
+  inventory_number: string
+  year: number
+  designer: string
+  location: string
+  technique: string
+  digitized_at: string // ISO date string
+  digitized_by: string
+  thumbnail_url: string
 }

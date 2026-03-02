@@ -53,6 +53,41 @@
         color="white"
         @click="toggleTheme"
       />
+      <!-- Auth -->
+      <template v-if="auth.user">
+        <v-menu>
+          <template #activator="{ props }">
+            <v-btn v-bind="props" variant="text" class="ml-2" color="white">
+              <v-avatar size="32" color="white">
+                <span class="text-caption font-weight-bold">{{ initials }}</span>
+              </v-avatar>
+            </v-btn>
+          </template>
+          <v-list min-width="180" density="compact">
+            <v-list-item
+              prepend-icon="mdi-account"
+              :title="auth.profile?.display_name ?? auth.user.email"
+            />
+            <v-divider />
+            <v-list-item
+              prepend-icon="mdi-shield-account"
+              :title="roleLabel"
+              density="compact"
+            />
+            <v-divider />
+            <v-list-item
+              prepend-icon="mdi-logout"
+              title="Abmelden"
+              @click="auth.signOut()"
+            />
+          </v-list>
+        </v-menu>
+      </template>
+      <template v-else>
+        <v-btn to="/login" prepend-icon="mdi-login" variant="tonal" color="white" class="ml-2">
+          Anmelden
+        </v-btn>
+      </template>
     </v-app-bar>
 
     <!-- Navigation Drawer (Mobile) -->
@@ -95,12 +130,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
+
+const auth = useAuthStore()
+auth.init()
 
 const drawer = ref(false)
 const theme = ref<'light' | 'dark'>('light')
 
 function toggleTheme() {
+  console.log(auth.profile)
   theme.value = theme.value === 'light' ? 'dark' : 'light'
 }
+
+const initials = computed(() => {
+  const name = auth.profile?.display_name ?? auth.user?.email ?? ''
+  return name.slice(0, 2).toUpperCase()
+})
+
+const roleLabel = computed(() => {
+  return auth.profile?.role == 'admin' ? 'Administrator' : 'Benutzer'
+})
+
 </script>

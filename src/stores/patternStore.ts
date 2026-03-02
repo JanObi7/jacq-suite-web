@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { supabase } from '@/stores/supabase'
+
 import type { Pattern } from '@/types/pattern'
 
 export const usePatternStore = defineStore('patterns', () => {
@@ -13,8 +15,32 @@ export const usePatternStore = defineStore('patterns', () => {
   const filterYearTo = ref<number | null>(null)
   const filterTags = ref<string[]>([])
 
-  // Dynamisches Laden der Pattern-Daten
+  // load all patterns
   async function loadPatterns() {
+    // loading.value = true
+    // error.value = null
+    try {
+      let query = supabase
+        .from('patterns')
+        .select('id, title, description, inventory_number, year, location, technique, designer, digitized_at, digitized_by, thumbnail_url')
+        .order('year', { ascending: false })
+
+      // if (filters.value.year) query = query.eq('year', filters.value.year)
+      // if (filters.value.location) query = query.eq('location', filters.value.location)
+      // if (filters.value.technique) query = query.eq('technique', filters.value.technique)
+
+      const { data, error: err } = await query
+      if (err) throw err
+      patterns.value = data ?? []
+    } catch (e) {
+      // error.value = e.message
+    } finally {
+      // loading.value = false
+    }
+  }
+
+  // Dynamisches Laden der Pattern-Daten
+  async function _loadPatterns() {
     if (patterns.value.length > 0) return // Bereits geladen
     
     isLoading.value = true
@@ -68,7 +94,8 @@ export const usePatternStore = defineStore('patterns', () => {
 
   // Alle verfügbaren Tags (für Filter-Chips)
   const allTags = computed(() =>
-    [...new Set(patterns.value.flatMap((p) => p.tags))].sort(),
+    // [...new Set(patterns.value.flatMap((p) => p.tags))].sort(),
+    [],
   )
 
   // Gefilterte Muster
@@ -77,11 +104,11 @@ export const usePatternStore = defineStore('patterns', () => {
       const q = searchQuery.value.toLowerCase()
       if (
         q &&
-        !p.name.toLowerCase().includes(q) &&
+        !p.title.toLowerCase().includes(q) &&
         !p.description.toLowerCase().includes(q) &&
         !p.designer.toLowerCase().includes(q) &&
-        !p.origin.toLowerCase().includes(q) &&
-        !p.tags.some((t) => t.toLowerCase().includes(q))
+        !p.location.toLowerCase().includes(q) //&&
+        // !p.tags.some((t) => t.toLowerCase().includes(q))
       ) {
         return false
       }
@@ -90,8 +117,8 @@ export const usePatternStore = defineStore('patterns', () => {
       if (filterYearFrom.value !== null && p.year < filterYearFrom.value) return false
       if (filterYearTo.value !== null && p.year > filterYearTo.value) return false
       if (
-        filterTags.value.length > 0 &&
-        !filterTags.value.every((t) => p.tags.includes(t))
+        filterTags.value.length > 0 // &&
+        // !filterTags.value.every((t) => p.tags.includes(t))
       ) {
         return false
       }
@@ -102,7 +129,7 @@ export const usePatternStore = defineStore('patterns', () => {
   // Die 5 zuletzt digitalisierten Muster (nach digitizedAt sortiert)
   const latestPatterns = computed(() => {
     return [...patterns.value]
-      .sort((a, b) => new Date(b.digitizedAt).getTime() - new Date(a.digitizedAt).getTime())
+      .sort((a, b) => new Date(b.digitized_at).getTime() - new Date(a.digitized_at).getTime())
       .slice(0, 5)
   })
 

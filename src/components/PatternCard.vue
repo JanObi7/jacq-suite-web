@@ -7,8 +7,8 @@
   >
     <!-- Bild -->
     <v-img
-      :src="thumbnailImage?.thumbnailUrl || 'https://picsum.photos/seed/placeholder/400/300'"
-      :alt="pattern.name"
+      :src="pattern.thumbnail_url"
+      :alt="pattern.title"
       height="200"
       cover
       class="bg-grey-lighten-3"
@@ -32,7 +32,7 @@
     </v-img>
 
     <v-card-item>
-      <v-card-title class="text-body-1 font-weight-bold">{{ pattern.name }}</v-card-title>
+      <v-card-title class="text-body-1 font-weight-bold">{{ pattern.title }}</v-card-title>
       <v-card-subtitle>{{ pattern.year }} · {{ pattern.technique }}</v-card-subtitle>
     </v-card-item>
 
@@ -43,10 +43,10 @@
       </div>
       <div class="d-flex align-center ga-1 mb-3 text-caption text-medium-emphasis">
         <v-icon icon="mdi-map-marker-outline" size="14" />
-        <span>{{ pattern.origin }}</span>
+        <span>{{ pattern.location }}</span>
       </div>
       <div class="d-flex flex-wrap ga-1">
-        <v-chip
+        <!-- <v-chip
           v-for="tag in pattern.tags.slice(0, 3)"
           :key="tag"
           size="x-small"
@@ -54,21 +54,21 @@
           color="primary"
         >
           {{ tag }}
-        </v-chip>
-        <v-chip v-if="pattern.tags.length > 3" size="x-small" variant="tonal" color="secondary">
+        </v-chip> -->
+        <!-- <v-chip v-if="pattern.tags.length > 3" size="x-small" variant="tonal" color="secondary">
           +{{ pattern.tags.length - 3 }}
-        </v-chip>
+        </v-chip> -->
       </div>
     </v-card-text>
 
     <v-card-actions class="pt-0">
       <div class="d-flex align-center ga-1 text-caption text-medium-emphasis">
         <v-icon icon="mdi-account-outline" size="14" />
-        <span>{{ pattern.digitizedBy }}</span>
+        <span>{{ pattern.digitized_by }}</span>
       </div>
       <div class="d-flex align-center ga-1 text-caption text-medium-emphasis">
         <v-icon icon="mdi-calendar-check-outline" size="14" />
-        <span>{{ formatDate(pattern.digitizedAt) }}</span>
+        <span>{{ formatDate(pattern.digitized_at) }}</span>
       </div>
       <v-spacer />
       <v-icon icon="mdi-chevron-right" color="primary" />
@@ -85,11 +85,11 @@ const props = defineProps<{
 }>()
 
 const thumbnailImage = computed(
-  () => props.pattern.images.find((img) => img.role === 'thumbnail') ?? props.pattern.images[0],
+  () => null // props.pattern.images.find((img) => img.role === 'thumbnail') ?? props.pattern.images[0],
 )
 
 const hasHighResImage = computed(
-  () => props.pattern.images.some((img) => img.isHighResolution)
+  () => false //props.pattern.images.some((img) => img.isHighResolution)
 )
 
 function formatDate(dateStr: string): string {
