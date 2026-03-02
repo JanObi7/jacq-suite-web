@@ -141,7 +141,7 @@
   </v-container>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
@@ -151,7 +151,7 @@ const route = useRoute()
 const auth = useAuthStore()
 
 // Tab
-const tab = ref('login')
+const tab = ref<'login' | 'register'>('login')
 
 // Shared
 const loading = ref(false)
@@ -168,14 +168,14 @@ const password = ref('')
 const regEmail = ref('')
 const regPassword = ref('')
 const regPasswordConfirm = ref('')
-const registerForm = ref(null)
+const registerForm = ref<{ validate: () => Promise<{ valid: boolean }>; reset: () => void } | null>(null)
 
 // Validierungsregeln
 const rules = {
-  required: (v) => !!v || 'Pflichtfeld',
-  email: (v) => /.+@.+\..+/.test(v) || 'Ungültige E-Mail-Adresse',
-  minLength: (v) => v?.length >= 8 || 'Mindestens 8 Zeichen',
-  passwordMatch: (v) => v === regPassword.value || 'Passwörter stimmen nicht überein',
+  required: (v: unknown) => !!v || 'Pflichtfeld',
+  email: (v: unknown) => /.+@.+\..+/.test(String(v)) || 'Ungültige E-Mail-Adresse',
+  minLength: (v: unknown) => (typeof v === 'string' && v.length >= 8) || 'Mindestens 8 Zeichen',
+  passwordMatch: (v: unknown) => v === regPassword.value || 'Passwörter stimmen nicht überein',
 }
 
 async function handleLogin() {
@@ -184,17 +184,17 @@ async function handleLogin() {
   errorMsg.value = ''
   try {
     await auth.signIn(email.value, password.value)
-    const redirect = route.query.redirect ?? '/'
+    const redirect = (route.query.redirect as string) ?? '/'
     router.push(redirect)
   } catch (e) {
-    errorMsg.value = e.message ?? 'Anmeldung fehlgeschlagen.'
+    errorMsg.value = (e instanceof Error ? e.message : null) ?? 'Anmeldung fehlgeschlagen.'
   } finally {
     loading.value = false
   }
 }
 
 async function handleRegister() {
-  const { valid } = await registerForm.value.validate()
+  const { valid } = await registerForm.value!.validate()
   if (!valid) return
 
   loading.value = true
@@ -208,9 +208,9 @@ async function handleRegister() {
     regEmail.value = ''
     regPassword.value = ''
     regPasswordConfirm.value = ''
-    registerForm.value.reset()
+    registerForm.value!.reset()
   } catch (e) {
-    errorMsg.value = e.message ?? 'Registrierung fehlgeschlagen.'
+    errorMsg.value = (e instanceof Error ? e.message : null) ?? 'Registrierung fehlgeschlagen.'
   } finally {
     loading.value = false
   }

@@ -104,6 +104,61 @@ export const usePatternStore = defineStore('patterns', () => {
     filterLabels.value = []
   }
 
+  // Muster und alle zugehörigen Bilder aus Supabase löschen
+  async function deletePattern(id: string): Promise<void> {
+    // pattern_images werden via ON DELETE CASCADE automatisch mitgelöscht
+    // (sofern in der DB so konfiguriert), alternativ explizit vorher löschen:
+    const { error: imgError } = await supabase
+      .from('pattern_images')
+      .delete()
+      .eq('pattern_id', id)
+    if (imgError) throw imgError
+
+    const { error } = await supabase
+      .from('patterns')
+      .delete()
+      .eq('id', id)
+    if (error) throw error
+
+    // Lokalen Store-State aktualisieren
+    patterns.value = patterns.value.filter((p) => p.id !== id)
+  }
+
+  // Neues Muster in Supabase anlegen
+  async function createPattern(
+    data: Pick<Pattern, 'title' | 'description' | 'inventory_number' | 'year' | 'designer' | 'location' | 'technique' | 'labels' | 'digitized_at' | 'digitized_by'>,
+  ): Promise<Pattern> {
+    const { data: created, error } = await supabase
+      .from('patterns')
+      .insert({ ...data, thumbnail_url: '' })
+      .select(`id, title, description, inventory_number, year, location, technique, designer,
+        digitized_at, digitized_by, thumbnail_url, labels,
+        images:pattern_images(*)`)
+      .single()
+    if (error) throw error
+    const newPattern = created as Pattern
+    patterns.value.unshift(newPattern)
+    return newPattern
+  }
+
+  // Muster-Metadaten in Supabase aktualisieren
+  async function updatePattern(
+    id: string,
+    updates: Partial<Pick<Pattern, 'title' | 'description' | 'year' | 'designer' | 'location' | 'technique' | 'labels' | 'digitized_at' | 'digitized_by'>>,
+  ): Promise<void> {
+    const { error } = await supabase
+      .from('patterns')
+      .update(updates)
+      .eq('id', id)
+    if (error) throw error
+
+    // Lokalen Store-State aktualisieren
+    const idx = patterns.value.findIndex((p) => p.id === id)
+    if (idx !== -1) {
+      patterns.value[idx] = { ...patterns.value[idx], ...updates } as Pattern
+    }
+  }
+
   return {
     patterns,
     isLoading,
@@ -122,5 +177,8 @@ export const usePatternStore = defineStore('patterns', () => {
     loadPatterns,
     getPatternById,
     resetFilters,
+    createPattern,
+    updatePattern,
+    deletePattern,
   }
 })

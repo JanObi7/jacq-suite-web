@@ -1,5 +1,46 @@
 <template>
   <v-container fluid class="pa-0">
+
+    <!-- Bestätigungsdialog Löschen (außerhalb von v-if/v-else) -->
+    <v-dialog v-model="confirmDelete" max-width="480" persistent>
+      <v-card rounded="lg">
+        <v-card-title class="d-flex align-center ga-2 pt-5 px-6">
+          <v-icon icon="mdi-alert-circle-outline" color="error" size="28" />
+          <span>Muster unwiderruflich löschen?</span>
+        </v-card-title>
+        <v-card-text class="px-6">
+          <p class="text-body-2 mb-3">
+            Das Muster <strong>{{ pattern?.title }}</strong> und alle damit verbundenen
+            Bilddatensätze werden <strong>unwiderruflich</strong> aus der Datenbank gelöscht.
+          </p>
+          <v-alert type="warning" variant="tonal" density="compact" icon="mdi-database-remove-outline">
+            Dieser Vorgang kann nicht rückgängig gemacht werden.
+          </v-alert>
+        </v-card-text>
+        <v-card-actions class="px-6 pb-5">
+          <v-spacer />
+          <v-btn
+            variant="tonal"
+            color="secondary"
+            prepend-icon="mdi-close"
+            :disabled="deleting"
+            @click="confirmDelete = false"
+          >
+            Abbrechen
+          </v-btn>
+          <v-btn
+            color="error"
+            variant="elevated"
+            prepend-icon="mdi-delete-forever"
+            :loading="deleting"
+            @click="handleDelete"
+          >
+            Endgültig löschen
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <!-- Nicht gefunden -->
     <v-container v-if="!pattern" class="py-12 text-center">
       <v-icon icon="mdi-alert-circle-outline" size="64" color="error" class="mb-4" />
@@ -10,20 +51,45 @@
       </v-btn>
     </v-container>
 
+    <!-- Detailansicht -->
     <template v-else>
       <!-- Header -->
       <v-sheet color="primary" class="py-6 px-4 text-white">
         <v-container>
-          <v-btn
-            to="/patterns"
-            variant="text"
-            color="white"
-            prepend-icon="mdi-arrow-left"
-            class="mb-3 opacity-80"
-            size="small"
-          >
-            Alle Muster
-          </v-btn>
+          <div class="d-flex align-center justify-space-between mb-3">
+            <v-btn
+              to="/patterns"
+              variant="text"
+              color="white"
+              prepend-icon="mdi-arrow-left"
+              size="small"
+              class="opacity-80"
+            >
+              Alle Muster
+            </v-btn>
+            <div class="d-flex ga-2">
+              <v-btn
+                v-if="auth.isEditor"
+                :to="`/patterns/${pattern.id}/edit`"
+                variant="tonal"
+                color="white"
+                prepend-icon="mdi-pencil"
+                size="small"
+              >
+                Bearbeiten
+              </v-btn>
+              <v-btn
+                v-if="auth.isAdmin"
+                variant="tonal"
+                color="error"
+                prepend-icon="mdi-delete-outline"
+                size="small"
+                @click="confirmDelete = true"
+              >
+                Löschen
+              </v-btn>
+            </div>
+          </div>
           <h1 class="text-h4 font-weight-bold mb-1">{{ pattern.title }}</h1>
           <div class="d-flex align-center ga-3 flex-wrap opacity-80 text-body-2">
             <span>
@@ -182,38 +248,8 @@
                   <v-list-item-subtitle class="text-body-2 font-weight-medium">{{ pattern.technique }}</v-list-item-subtitle>
                 </v-list-item>
                 <v-divider inset />
-                <!-- <v-list-item>
-                  <template #prepend>
-                    <v-icon icon="mdi-arrow-all" color="primary" size="20" />
-                  </template>
-                  <v-list-item-title class="text-caption text-medium-emphasis">Größe</v-list-item-title>
-                  <v-list-item-subtitle class="text-body-2 font-weight-medium">{{ pattern.width.toLocaleString('de-DE') }} × {{ pattern.height.toLocaleString('de-DE') }}</v-list-item-subtitle>
-                </v-list-item> -->
-                
               </v-list>
             </v-card>
-
-            <!-- Farben -->
-            <!-- <v-card rounded="lg" class="mb-4">
-              <v-card-title class="text-body-1 font-weight-bold">
-                <v-icon icon="mdi-palette-outline" class="mr-2" />
-                Farben
-              </v-card-title>
-              <v-divider />
-              <v-card-text>
-                <div class="d-flex flex-wrap ga-2">
-                  <v-chip
-                    v-for="color in pattern.colors"
-                    :key="color"
-                    size="small"
-                    variant="tonal"
-                    prepend-icon="mdi-circle"
-                  >
-                    {{ color }}
-                  </v-chip>
-                </div>
-              </v-card-text>
-            </v-card> -->
 
             <!-- Tags -->
             <v-card rounded="lg" class="mb-4">
@@ -343,6 +379,7 @@
         </v-card>
       </v-container>
     </template>
+
   </v-container>
 </template>
 
@@ -350,12 +387,14 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { usePatternStore } from '@/stores/patternStore'
+import { useAuthStore } from '@/stores/authStore'
 import type { PatternImage, ImageRole } from '@/types/pattern'
 import ImageViewer from '@/components/ImageViewer.vue'
 
 const route = useRoute()
 const router = useRouter()
 const store = usePatternStore()
+const auth = useAuthStore()
 
 // Daten beim Mounten laden
 onMounted(() => {
@@ -365,21 +404,21 @@ onMounted(() => {
 const pattern = computed(() => store.getPatternById(route.params.id as string))
 
 const activeImage = ref<PatternImage>(
-  <PatternImage>pattern.value?.images?.find((img) => img.role === 'thumbnail') ?? {
-      id: '',
-      url: '',
-      thumbnailUrl: '',
-      role: 'other',
-      label: '',
-    },
-)
-
-watch(pattern, async (newPattern, oldPattern) => {
-  activeImage.value = <PatternImage>pattern.value?.images?.find((img) => img.role === 'thumbnail') ?? {
+  pattern.value?.images?.find((img) => img.role === 'thumbnail') ?? {
     id: '',
     url: '',
     thumbnailUrl: '',
-    role: 'other',
+    role: 'other' as ImageRole,
+    label: '',
+  },
+)
+
+watch(pattern, () => {
+  activeImage.value = pattern.value?.images?.find((img) => img.role === 'thumbnail') ?? {
+    id: '',
+    url: '',
+    thumbnailUrl: '',
+    role: 'other' as ImageRole,
     label: '',
   }
 })
@@ -387,6 +426,24 @@ watch(pattern, async (newPattern, oldPattern) => {
 const highResCount = computed(
   () => pattern.value?.images?.filter((img) => img.highres).length ?? 0,
 )
+
+// Löschen-State
+const confirmDelete = ref(false)
+const deleting = ref(false)
+
+async function handleDelete() {
+  if (!pattern.value) return
+  deleting.value = true
+  try {
+    await store.deletePattern(pattern.value.id)
+    confirmDelete.value = false
+    router.push({ name: 'home' })
+  } catch (e) {
+    console.error('Fehler beim Löschen:', e)
+  } finally {
+    deleting.value = false
+  }
+}
 
 function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString('de-DE', {

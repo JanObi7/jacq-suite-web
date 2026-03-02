@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import { supabase } from '@/stores/supabase'
 
 import type { User } from '@supabase/supabase-js'
-import type { Profile } from '@/types/user'
+import type { Profile, UserRole } from '@/types/user'
 
 
 export const useAuthStore = defineStore('auth', () => {
@@ -11,7 +11,13 @@ export const useAuthStore = defineStore('auth', () => {
   const profile = ref<Profile | null>(null)
   const initialized = ref<boolean>(false)
 
-  const isAdmin = computed(() => profile.value?.role == "admin")
+  const isAdmin = computed(() => profile.value?.role === 'admin')
+  const isEditor = computed(() => profile.value?.role === 'editor' || profile.value?.role === 'admin')
+
+  // Hilfsfunktion: prüft ob der User eine der erlaubten Rollen hat
+  function hasRole(...roles: UserRole[]): boolean {
+    return roles.includes(profile.value?.role ?? ('' as UserRole))
+  }
 
   async function init() {
     const { data: { session } } = await supabase.auth.getSession()
@@ -55,5 +61,5 @@ export const useAuthStore = defineStore('auth', () => {
     profile.value = null
   }
 
-  return { user, profile, initialized, isAdmin, init, signIn, signUp, signOut }
+  return { user, profile, initialized, isAdmin, isEditor, hasRole, init, signIn, signUp, signOut }
 })

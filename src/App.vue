@@ -17,7 +17,7 @@
         variant="text" 
         color="white" 
         prepend-icon="mdi-home"
-        class="d-none d-md-flex"
+        class="d-none d-md-flex mx-1"
       >
         Startseite
       </v-btn>
@@ -26,9 +26,19 @@
         variant="text" 
         color="white" 
         prepend-icon="mdi-view-grid"
-        class="d-none d-md-flex"
+        class="d-none d-md-flex mx-1"
       >
         Alle Muster
+      </v-btn>
+      <v-btn
+        v-if="auth.isAdmin"
+        to="/patterns/create"
+        variant="tonal"
+        color="white"
+        prepend-icon="mdi-plus"
+        class="d-none d-md-flex mx-1"
+      >
+        Neues Muster
       </v-btn>
 
       <!-- Mobile: Nur Icons -->
@@ -46,6 +56,14 @@
         color="white"
         class="d-md-none"
       />
+      <v-btn
+        v-if="auth.isAdmin"
+        to="/patterns/create"
+        icon="mdi-plus-thick"
+        variant="text"
+        color="white"
+        class="d-md-none mx-1"
+      />
 
       <v-btn
         :icon="theme === 'dark' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
@@ -57,11 +75,11 @@
       <template v-if="auth.user">
         <v-menu>
           <template #activator="{ props }">
-            <v-btn v-bind="props" variant="text" class="ml-2" color="white">
-              <v-avatar size="32" color="white">
+            <v-btn v-bind="props" variant="text" class="ml-1" color="white" icon="mdi-account"/>
+              <!-- <v-avatar size="32" color="white">
                 <span class="text-caption font-weight-bold">{{ initials }}</span>
-              </v-avatar>
-            </v-btn>
+              </v-avatar> -->
+            <!-- </v-btn> -->
           </template>
           <v-list min-width="180" density="compact">
             <v-list-item
@@ -84,7 +102,7 @@
         </v-menu>
       </template>
       <template v-else>
-        <v-btn to="/login" prepend-icon="mdi-login" variant="tonal" color="white" class="ml-2">
+        <v-btn to="/login" prepend-icon="mdi-login" variant="text" color="white" class="ml-1">
           Anmelden
         </v-btn>
       </template>
@@ -110,6 +128,13 @@
           prepend-icon="mdi-view-grid"
           title="Alle Muster"
           to="/patterns"
+          @click="drawer = false"
+        />
+        <v-list-item
+          v-if="auth.isAdmin"
+          prepend-icon="mdi-plus-circle-outline"
+          title="Neues Muster"
+          to="/patterns/create"
           @click="drawer = false"
         />
       </v-list>

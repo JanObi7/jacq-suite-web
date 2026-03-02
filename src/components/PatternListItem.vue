@@ -85,8 +85,7 @@ const images = <PatternImage[]>[]
 
 const thumbnailUrl = computed(
   () => {
-    const url = props.pattern.images?.find((img) => img.role === 'thumbnail')?.thumbnailUrl ?? ""
-    return "https://udqxjkmnrefvkeuueoce.supabase.co/storage/v1/object/public/jacqsuite-images/" + url
+    return "https://udqxjkmnrefvkeuueoce.supabase.co/storage/v1/object/public/jacqsuite-images/" + props.pattern.inventory_number + "/symbol.png"
   }
 )
 
