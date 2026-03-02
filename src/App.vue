@@ -17,7 +17,7 @@
         variant="text" 
         color="white" 
         prepend-icon="mdi-home"
-        class="d-none d-sm-flex"
+        class="d-none d-md-flex"
       >
         Startseite
       </v-btn>
@@ -26,7 +26,7 @@
         variant="text" 
         color="white" 
         prepend-icon="mdi-view-grid"
-        class="d-none d-sm-flex"
+        class="d-none d-md-flex"
       >
         Alle Muster
       </v-btn>
@@ -37,14 +37,14 @@
         icon="mdi-home"
         variant="text" 
         color="white"
-        class="d-sm-none"
+        class="d-md-none"
       />
       <v-btn 
         to="/patterns" 
         icon="mdi-view-grid"
         variant="text" 
         color="white"
-        class="d-sm-none"
+        class="d-md-none"
       />
 
       <v-btn
