@@ -86,8 +86,10 @@ const props = defineProps<{
 
 const thumbnailUrl = computed(
   () => {
-    const url = props.pattern.images?.find((img) => img.role === 'thumbnail')?.thumbnailUrl ?? ""
-    return "https://udqxjkmnrefvkeuueoce.supabase.co/storage/v1/object/public/jacqsuite-images/" + url
+    var url = props.pattern.images?.find((img) => img.role === 'thumbnail')?.thumbnailUrl ?? ""
+    url = "https://udqxjkmnrefvkeuueoce.supabase.co/storage/v1/object/public/jacqsuite-images/" + url
+    console.log(url)
+    return url
   }
 )
 

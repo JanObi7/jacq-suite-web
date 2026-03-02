@@ -105,7 +105,7 @@
                 @click="activeImage = img"
               >
                 <v-img
-                  :src="img.thumbnailUrl"
+                  :src="'https://udqxjkmnrefvkeuueoce.supabase.co/storage/v1/object/public/jacqsuite-images/'+img.thumbnailUrl"
                   :alt="img.label"
                   width="90"
                   height="68"
@@ -364,29 +364,24 @@ onMounted(() => {
 
 const pattern = computed(() => store.getPatternById(route.params.id as string))
 
-const images = <PatternImage[]>[]
-
 const activeImage = ref<PatternImage>(
-  images.find((img) => img.role === 'thumbnail') ??
-    images[0] ?? {
+  <PatternImage>pattern.value?.images?.find((img) => img.role === 'thumbnail') ?? {
       id: '',
       url: '',
-      thumbnailUrl: <string>pattern.value?.thumbnail_url,
+      thumbnailUrl: '',
       role: 'other',
       label: '',
     },
 )
 
 watch(pattern, async (newPattern, oldPattern) => {
-  const images = <PatternImage[]>[]
-  activeImage.value = images.find((img) => img.role === 'thumbnail') ??
-    images[0] ?? {
+  <PatternImage>pattern.value?.images?.find((img) => img.role === 'thumbnail') ?? {
       id: '',
       url: '',
-      thumbnailUrl: <string>pattern.value?.thumbnail_url,
+      thumbnailUrl: '',
       role: 'other',
       label: '',
-    }
+    },
 })
 
 const highResCount = computed(
