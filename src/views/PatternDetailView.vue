@@ -65,6 +65,7 @@
                   <v-chip
                     :color="roleColor(activeImage.role)"
                     size="small"
+                    variant="flat"
                     class="position-absolute ma-3"
                     style="bottom: 0; left: 0"
                     :prepend-icon="roleIcon(activeImage.role)"
@@ -73,9 +74,10 @@
                   </v-chip>
                   <!-- HD Badge -->
                   <v-chip
-                    v-if="activeImage.isHighResolution"
+                    v-if="activeImage.highres"
                     color="accent"
                     size="small"
+                    variant="flat"
                     class="position-absolute ma-3"
                     style="bottom: 0; right: 0"
                     prepend-icon="mdi-magnify-plus"
@@ -88,12 +90,12 @@
               <v-card-text class="py-2 text-caption text-medium-emphasis text-center">
                 <v-icon icon="mdi-cursor-pointer" size="14" class="mr-1" />
                 Klicken für
-                {{ activeImage.isHighResolution ? 'interaktive Hochauflösungs-Ansicht' : 'Vollbildansicht' }}
+                {{ activeImage.highres ? 'interaktive Hochauflösungs-Ansicht' : 'Vollbildansicht' }}
               </v-card-text>
             </v-card>
 
             <!-- Bildergalerie (Thumbnails) -->
-            <!-- <div class="d-flex flex-wrap ga-2">
+            <div class="d-flex flex-wrap ga-2">
               <v-card
                 v-for="img in pattern.images"
                 :key="img.id"
@@ -115,7 +117,7 @@
                     {{ img.label }}
                   </span>
                   <v-icon
-                    v-if="img.isHighResolution"
+                    v-if="img.highres"
                     icon="mdi-magnify-plus"
                     size="10"
                     color="accent"
@@ -123,7 +125,7 @@
                   />
                 </div>
               </v-card>
-            </div> -->
+            </div>
           </v-col>
 
           <!-- Rechte Spalte: Metadaten -->
@@ -188,19 +190,19 @@
                   <v-list-item-subtitle class="text-body-2 font-weight-medium">{{ pattern.width.toLocaleString('de-DE') }} × {{ pattern.height.toLocaleString('de-DE') }}</v-list-item-subtitle>
                 </v-list-item> -->
                 
-                <!-- <v-divider inset />
+                <v-divider inset />
                 <v-list-item>
                   <template #prepend>
                     <v-icon icon="mdi-image-multiple-outline" color="primary" size="20" />
                   </template>
                   <v-list-item-title class="text-caption text-medium-emphasis">Bilder</v-list-item-title>
                   <v-list-item-subtitle class="text-body-2 font-weight-medium">
-                    {{ pattern.images.length }} Bild{{ pattern.images.length !== 1 ? 'er' : '' }}
+                    {{ pattern.images?.length }} Bild{{ pattern.images?.length !== 1 ? 'er' : '' }}
                     <span v-if="highResCount > 0" class="text-accent">
                       ({{ highResCount }} HD)
                     </span>
                   </v-list-item-subtitle>
-                </v-list-item> -->
+                </v-list-item>
               </v-list>
             </v-card>
 
@@ -227,7 +229,7 @@
             </v-card> -->
 
             <!-- Tags -->
-            <!-- <v-card rounded="lg" class="mb-4">
+            <v-card rounded="lg" class="mb-4">
               <v-card-title class="text-body-1 font-weight-bold">
                 <v-icon icon="mdi-tag-multiple-outline" class="mr-2" />
                 Tags
@@ -236,18 +238,18 @@
               <v-card-text>
                 <div class="d-flex flex-wrap ga-2">
                   <v-chip
-                    v-for="tag in pattern.tags"
-                    :key="tag"
+                    v-for="label in pattern.labels"
+                    :key="label"
                     size="small"
                     variant="tonal"
                     color="primary"
-                    :to="`/patterns?tag=${tag}`"
+                    :to="`/patterns?label=${label}`"
                   >
-                    {{ tag }}
+                    {{ label }}
                   </v-chip>
                 </div>
               </v-card-text>
-            </v-card> -->
+            </v-card>
 
             <!-- Digitalisierung -->
             <v-card rounded="lg" class="mb-4">
@@ -282,7 +284,7 @@
         </v-row>
 
         <!-- Bildübersicht Tabelle -->
-        <!-- <v-card rounded="lg">
+        <v-card rounded="lg">
           <v-card-title class="text-body-1 font-weight-bold">
             <v-icon icon="mdi-image-multiple-outline" class="mr-2" />
             Alle Bilder dieses Musters
@@ -319,7 +321,7 @@
                 <td class="text-caption">
                   <span v-if="img.width && img.height">
                     {{ img.width.toLocaleString('de-DE') }} × {{ img.height.toLocaleString('de-DE') }} px
-                    <v-chip v-if="img.isHighResolution" size="x-small" color="accent" class="ml-1">HD</v-chip>
+                    <v-chip v-if="img.highres" size="x-small" color="accent" class="ml-1">HD</v-chip>
                   </span>
                   <span v-else class="text-medium-emphasis">–</span>
                 </td>
@@ -328,17 +330,17 @@
                     <v-btn
                       size="x-small"
                       variant="tonal"
-                      :color="img.isHighResolution ? 'accent' : 'primary'"
-                      :prepend-icon="img.isHighResolution ? 'mdi-magnify-scan' : 'mdi-fullscreen'"
+                      :color="img.highres ? 'accent' : 'primary'"
+                      :prepend-icon="img.highres ? 'mdi-magnify-scan' : 'mdi-fullscreen'"
                     >
-                      {{ img.isHighResolution ? 'Interaktiv' : 'Ansehen' }}
+                      {{ img.highres ? 'Interaktiv' : 'Ansehen' }}
                     </v-btn>
                   </ImageViewer>
                 </td>
               </tr>
             </tbody>
           </v-table>
-        </v-card> -->
+        </v-card>
       </v-container>
     </template>
   </v-container>
@@ -388,7 +390,7 @@ watch(pattern, async (newPattern, oldPattern) => {
 })
 
 const highResCount = computed(
-  () => 0 //pattern.value?.images.filter((img) => img.isHighResolution).length ?? 0,
+  () => pattern.value?.images?.filter((img) => img.highres).length ?? 0,
 )
 
 function formatDate(dateStr: string): string {

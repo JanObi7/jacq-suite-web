@@ -3,7 +3,7 @@
     <div class="d-flex align-stretch">
       <!-- Thumbnail -->
       <v-img
-        :src="thumbnailImage?.thumbnailUrl || 'https://picsum.photos/seed/placeholder/400/300'"
+        :src="thumbnailUrl"
         :alt="pattern.title"
         width="140"
         min-width="140"
@@ -43,9 +43,9 @@
         </div>
 
         <div class="d-flex align-center justify-space-between mt-2 flex-wrap ga-1">
-          <!-- <div class="d-flex flex-wrap ga-1">
+          <div class="d-flex flex-wrap ga-1">
             <v-chip
-              v-for="tag in pattern.tags.slice(0, 4)"
+              v-for="tag in pattern.labels.slice(0, 4)"
               :key="tag"
               size="x-small"
               variant="tonal"
@@ -53,10 +53,10 @@
             >
               {{ tag }}
             </v-chip>
-            <v-chip v-if="pattern.tags.length > 4" size="x-small" variant="tonal" color="secondary">
-              +{{ pattern.tags.length - 4 }}
+            <v-chip v-if="pattern.labels.length > 4" size="x-small" variant="tonal" color="secondary">
+              +{{ pattern.labels.length - 4 }}
             </v-chip>
-          </div> -->
+          </div>
           <div class="d-flex align-center ga-3 text-caption text-medium-emphasis">
             <span>
               <v-icon icon="mdi-account-outline" size="12" class="mr-1" />
@@ -83,14 +83,11 @@ const props = defineProps<{
 
 const images = <PatternImage[]>[]
 
-const thumbnailImage = computed(
-  () => ({
-    id: '',
-    url: '',
-    thumbnailUrl: <string>props.pattern?.thumbnail_url,
-    role: 'other',
-    label: '',
-  })
+const thumbnailUrl = computed(
+  () => {
+    const url = props.pattern.images?.find((img) => img.role === 'thumbnail')?.thumbnailUrl ?? ""
+    return "https://udqxjkmnrefvkeuueoce.supabase.co/storage/v1/object/public/jacqsuite-images/" + url
+  }
 )
 
 const hasHighResImage = computed(() => images.some((img) => img.isHighResolution))

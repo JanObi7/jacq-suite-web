@@ -8,7 +8,7 @@ export interface PatternImage {
   label: string
   width?: number
   height?: number
-  isHighResolution?: boolean // true wenn > 15000x10000
+  highres?: boolean // true wenn > 15000x10000
 }
 
 export interface Pattern {
@@ -23,4 +23,6 @@ export interface Pattern {
   digitized_at: string // ISO date string
   digitized_by: string
   thumbnail_url: string
+  labels: string[]
+  images?: PatternImage[]
 }

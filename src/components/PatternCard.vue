@@ -7,7 +7,7 @@
   >
     <!-- Bild -->
     <v-img
-      :src="pattern.thumbnail_url"
+      :src="thumbnailUrl"
       :alt="pattern.title"
       height="200"
       cover
@@ -46,18 +46,18 @@
         <span>{{ pattern.location }}</span>
       </div>
       <div class="d-flex flex-wrap ga-1">
-        <!-- <v-chip
-          v-for="tag in pattern.tags.slice(0, 3)"
-          :key="tag"
+        <v-chip
+          v-for="label in pattern.labels.slice(0, 3)"
+          :key="label"
           size="x-small"
           variant="tonal"
           color="primary"
         >
-          {{ tag }}
-        </v-chip> -->
-        <!-- <v-chip v-if="pattern.tags.length > 3" size="x-small" variant="tonal" color="secondary">
-          +{{ pattern.tags.length - 3 }}
-        </v-chip> -->
+          {{ label }}
+        </v-chip>
+        <v-chip v-if="pattern.labels.length > 3" size="x-small" variant="tonal" color="secondary">
+          +{{ pattern.labels.length - 3 }}
+        </v-chip>
       </div>
     </v-card-text>
 
@@ -84,12 +84,15 @@ const props = defineProps<{
   pattern: Pattern
 }>()
 
-const thumbnailImage = computed(
-  () => null // props.pattern.images.find((img) => img.role === 'thumbnail') ?? props.pattern.images[0],
+const thumbnailUrl = computed(
+  () => {
+    const url = props.pattern.images?.find((img) => img.role === 'thumbnail')?.thumbnailUrl ?? ""
+    return "https://udqxjkmnrefvkeuueoce.supabase.co/storage/v1/object/public/jacqsuite-images/" + url
+  }
 )
 
 const hasHighResImage = computed(
-  () => false //props.pattern.images.some((img) => img.isHighResolution)
+  () => props.pattern.images?.some((img) => img.highres)
 )
 
 function formatDate(dateStr: string): string {

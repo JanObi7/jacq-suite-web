@@ -5,12 +5,12 @@
         <slot />
         <div class="image-overlay d-flex align-center justify-center">
           <v-icon
-            :icon="image.isHighResolution ? 'mdi-magnify-scan' : 'mdi-fullscreen'"
+            :icon="image.highres ? 'mdi-magnify-scan' : 'mdi-fullscreen'"
             color="white"
             size="32"
           />
           <span class="text-white text-caption ml-1">
-            {{ image.isHighResolution ? 'Interaktive Ansicht' : 'Vollbild' }}
+            {{ image.highres ? 'Interaktive Ansicht' : 'Vollbild' }}
           </span>
         </div>
       </div>
@@ -21,7 +21,7 @@
       <v-toolbar color="primary" density="compact">
         <v-toolbar-title class="text-body-1">
           {{ image.label }}
-          <span v-if="image.isHighResolution" class="text-caption opacity-70 ml-2">
+          <span v-if="image.highres" class="text-caption opacity-70 ml-2">
             ({{ image.width?.toLocaleString('de-DE') }} × {{ image.height?.toLocaleString('de-DE') }} px)
           </span>
         </v-toolbar-title>
@@ -30,7 +30,7 @@
       </v-toolbar>
 
       <!-- OpenSeadragon Viewer für hochauflösende Bilder -->
-      <div v-if="image.isHighResolution" ref="osdContainer" class="osd-container" />
+      <div v-if="image.highres" ref="osdContainer" class="osd-container" />
 
       <!-- Normaler Bild-Viewer -->
       <div v-else class="normal-viewer d-flex align-center justify-center bg-black">
@@ -59,7 +59,7 @@ const osdContainer = ref<HTMLElement | null>(null)
 let viewer: OpenSeadragon.Viewer | null = null
 
 watch(dialog, async (open) => {
-  if (open && props.image.isHighResolution) {
+  if (open && props.image.highres) {
     await nextTick()
     if (osdContainer.value && !viewer) {
       viewer = OpenSeadragon({

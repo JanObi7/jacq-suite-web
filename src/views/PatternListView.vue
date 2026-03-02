@@ -20,16 +20,14 @@
                 <v-icon icon="mdi-filter-variant" class="mr-1" />
                 Filter
               </span>
-              <v-btn
+              <span class="text-body-1 font-weight-bold">
+              <v-icon
                 v-if="hasActiveFilters"
-                size="small"
-                variant="text"
+                icon="mdi-filter-off"
                 color="error"
-                prepend-icon="mdi-close-circle"
                 @click="store.resetFilters()"
-              >
-                Zurücksetzen
-              </v-btn>
+              />
+              </span>
             </v-card-title>
             <v-divider />
             <v-card-text>
@@ -97,14 +95,14 @@
               </v-row>
 
               <!-- Tags Filter -->
-              <div class="text-caption text-medium-emphasis mb-2">Tags</div>
+              <div class="text-caption text-medium-emphasis mb-2">Labels</div>
               <div class="d-flex flex-wrap ga-1">
                 <v-chip
-                  v-for="tag in store.allTags"
+                  v-for="tag in store.allLabels"
                   :key="tag"
                   size="small"
-                  :variant="store.filterTags.includes(tag) ? 'elevated' : 'tonal'"
-                  :color="store.filterTags.includes(tag) ? 'primary' : 'default'"
+                  :variant="store.filterLabels.includes(tag) ? 'elevated' : 'tonal'"
+                  :color="store.filterLabels.includes(tag) ? 'primary' : 'default'"
                   class="cursor-pointer"
                   @click="toggleTag(tag)"
                 >
@@ -210,7 +208,7 @@ const hasActiveFilters = computed(
     store.filterTechnique !== '' ||
     store.filterYearFrom !== null ||
     store.filterYearTo !== null ||
-    store.filterTags.length > 0,
+    store.filterLabels.length > 0,
 )
 
 const sortedPatterns = computed(() => {
@@ -218,16 +216,16 @@ const sortedPatterns = computed(() => {
   switch (sortBy.value) {
     case 'digitizedAt_desc':
       return list.sort(
-        (a, b) => new Date(b.digitizedAt).getTime() - new Date(a.digitizedAt).getTime(),
+        (a, b) => new Date(b.digitized_at).getTime() - new Date(a.digitized_at).getTime(),
       )
     case 'digitizedAt_asc':
       return list.sort(
-        (a, b) => new Date(a.digitizedAt).getTime() - new Date(b.digitizedAt).getTime(),
+        (a, b) => new Date(a.digitized_at).getTime() - new Date(b.digitized_at).getTime(),
       )
     case 'name_asc':
-      return list.sort((a, b) => a.name.localeCompare(b.name, 'de'))
+      return list.sort((a, b) => a.title.localeCompare(b.title, 'de'))
     case 'name_desc':
-      return list.sort((a, b) => b.name.localeCompare(a.name, 'de'))
+      return list.sort((a, b) => b.title.localeCompare(a.title, 'de'))
     case 'year_asc':
       return list.sort((a, b) => a.year - b.year)
     case 'year_desc':
@@ -238,11 +236,11 @@ const sortedPatterns = computed(() => {
 })
 
 function toggleTag(tag: string) {
-  const idx = store.filterTags.indexOf(tag)
+  const idx = store.filterLabels.indexOf(tag)
   if (idx === -1) {
-    store.filterTags.push(tag)
+    store.filterLabels.push(tag)
   } else {
-    store.filterTags.splice(idx, 1)
+    store.filterLabels.splice(idx, 1)
   }
 }
 </script>
