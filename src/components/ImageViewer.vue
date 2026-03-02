@@ -35,7 +35,7 @@
       <!-- Normaler Bild-Viewer -->
       <div v-else class="normal-viewer d-flex align-center justify-center bg-black">
         <v-img
-          :src="image.url"
+          :src="base+image.url"
           :alt="image.label"
           max-height="calc(100vh - 48px)"
           contain
@@ -50,6 +50,7 @@ import { ref, watch, nextTick, onUnmounted } from 'vue'
 import type { PatternImage } from '@/types/pattern'
 import OpenSeadragon from 'openseadragon'
 
+const base = "https://udqxjkmnrefvkeuueoce.supabase.co/storage/v1/object/public/jacqsuite-images/"
 const props = defineProps<{
   image: PatternImage
 }>()
@@ -65,7 +66,7 @@ watch(dialog, async (open) => {
       viewer = OpenSeadragon({
         element: osdContainer.value,
         prefixUrl: "/jacq-suite-web/openseadragon/images/",
-        tileSources: props.image.url.endsWith(".dzi") ? props.image.url : {type: 'image', url: props.image.url },
+        tileSources: props.image.url.endsWith(".dzi") ? base+props.image.url : {type: 'image', url: base+props.image.url },
         showNavigationControl: true,
         showNavigator: true,
         navigatorPosition: 'BOTTOM_RIGHT',

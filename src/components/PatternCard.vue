@@ -88,7 +88,6 @@ const thumbnailUrl = computed(
   () => {
     var url = props.pattern.images?.find((img) => img.role === 'thumbnail')?.thumbnailUrl ?? ""
     url = "https://udqxjkmnrefvkeuueoce.supabase.co/storage/v1/object/public/jacqsuite-images/" + url
-    console.log(url)
     return url
   }
 )

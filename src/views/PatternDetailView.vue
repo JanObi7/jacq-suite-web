@@ -50,7 +50,7 @@
             <v-card rounded="lg" class="mb-4 overflow-hidden">
               <ImageViewer :image="activeImage">
                 <v-img
-                  :src="activeImage.thumbnailUrl"
+                  :src="'https://udqxjkmnrefvkeuueoce.supabase.co/storage/v1/object/public/jacqsuite-images/'+activeImage.thumbnailUrl"
                   :alt="activeImage.label"
                   height="420"
                   cover
@@ -190,19 +190,6 @@
                   <v-list-item-subtitle class="text-body-2 font-weight-medium">{{ pattern.width.toLocaleString('de-DE') }} × {{ pattern.height.toLocaleString('de-DE') }}</v-list-item-subtitle>
                 </v-list-item> -->
                 
-                <v-divider inset />
-                <v-list-item>
-                  <template #prepend>
-                    <v-icon icon="mdi-image-multiple-outline" color="primary" size="20" />
-                  </template>
-                  <v-list-item-title class="text-caption text-medium-emphasis">Bilder</v-list-item-title>
-                  <v-list-item-subtitle class="text-body-2 font-weight-medium">
-                    {{ pattern.images?.length }} Bild{{ pattern.images?.length !== 1 ? 'er' : '' }}
-                    <span v-if="highResCount > 0" class="text-accent">
-                      ({{ highResCount }} HD)
-                    </span>
-                  </v-list-item-subtitle>
-                </v-list-item>
               </v-list>
             </v-card>
 
@@ -278,6 +265,19 @@
                     {{ formatDate(pattern.digitized_at) }}
                   </v-list-item-subtitle>
                 </v-list-item>
+                <v-divider inset />
+                <v-list-item>
+                  <template #prepend>
+                    <v-icon icon="mdi-image-multiple-outline" color="primary" size="20" />
+                  </template>
+                  <v-list-item-title class="text-caption text-medium-emphasis">Bilder</v-list-item-title>
+                  <v-list-item-subtitle class="text-body-2 font-weight-medium">
+                    {{ pattern.images?.length }} Bild{{ pattern.images?.length !== 1 ? 'er' : '' }}
+                    <span v-if="highResCount > 0" class="text-accent">
+                      ({{ highResCount }} HD)
+                    </span>
+                  </v-list-item-subtitle>
+                </v-list-item>
               </v-list>
             </v-card>
           </v-col>
@@ -304,7 +304,7 @@
               <tr v-for="img in pattern.images" :key="img.id">
                 <td class="py-2">
                   <v-img
-                    :src="img.thumbnailUrl"
+                    :src="'https://udqxjkmnrefvkeuueoce.supabase.co/storage/v1/object/public/jacqsuite-images/'+img.thumbnailUrl"
                     width="60"
                     height="45"
                     cover
@@ -375,13 +375,13 @@ const activeImage = ref<PatternImage>(
 )
 
 watch(pattern, async (newPattern, oldPattern) => {
-  <PatternImage>pattern.value?.images?.find((img) => img.role === 'thumbnail') ?? {
-      id: '',
-      url: '',
-      thumbnailUrl: '',
-      role: 'other',
-      label: '',
-    },
+  activeImage.value = <PatternImage>pattern.value?.images?.find((img) => img.role === 'thumbnail') ?? {
+    id: '',
+    url: '',
+    thumbnailUrl: '',
+    role: 'other',
+    label: '',
+  }
 })
 
 const highResCount = computed(

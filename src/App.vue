@@ -140,7 +140,6 @@ const drawer = ref(false)
 const theme = ref<'light' | 'dark'>('light')
 
 function toggleTheme() {
-  console.log(auth.profile)
   theme.value = theme.value === 'light' ? 'dark' : 'light'
 }
 
