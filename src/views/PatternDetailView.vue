@@ -255,7 +255,7 @@
             <v-card rounded="lg" class="mb-4">
               <v-card-title class="text-body-1 font-weight-bold">
                 <v-icon icon="mdi-tag-multiple-outline" class="mr-2" />
-                Tags
+                Kategorien
               </v-card-title>
               <v-divider />
               <v-card-text>
