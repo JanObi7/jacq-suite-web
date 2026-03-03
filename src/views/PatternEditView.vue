@@ -193,6 +193,18 @@
                 </v-card-text>
               </v-card>
 
+              <!-- Bilder & Medien -->
+              <v-card rounded="lg" class="mb-6">
+                <v-card-title class="text-body-1 font-weight-bold">
+                  <v-icon icon="mdi-image-multiple-outline" class="mr-2" />
+                  Bilder & Medien
+                </v-card-title>
+                <v-divider />
+                <v-card-text>
+                  <PatternImagesEditor v-if="pattern" :pattern="pattern" />
+                </v-card-text>
+              </v-card>
+
             </v-col>
 
             <!-- Rechte Spalte: Labels + Vorschau -->
@@ -233,8 +245,8 @@
                 <v-divider />
                 <v-card-text class="text-center">
                   <v-img
-                    v-if="thumbnailUrl"
-                    :src="thumbnailUrl"
+                    v-if="store.getThumbnailUrl(pattern)"
+                    :src="store.getThumbnailUrl(pattern)"
                     :alt="pattern.title"
                     height="180"
                     cover
@@ -305,6 +317,7 @@ import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { usePatternStore } from '@/stores/patternStore'
 import { useAuthStore } from '@/stores/authStore'
+import PatternImagesEditor from '@/components/PatternImagesEditor.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -365,13 +378,6 @@ const isDirty = computed(() => {
     form.digitized_by !== pattern.value.digitized_by ||
     form.digitized_at !== pattern.value.digitized_at.slice(0, 10)
   )
-})
-
-// Thumbnail-URL für Vorschau
-const thumbnailUrl = computed(() => {
-  const url = pattern.value?.images?.find((img) => img.role === 'thumbnail')?.thumbnailUrl ?? ''
-  if (!url) return ''
-  return 'https://udqxjkmnrefvkeuueoce.supabase.co/storage/v1/object/public/jacqsuite-images/' + url
 })
 
 // Rollen-Label für Anzeige

@@ -35,7 +35,7 @@
       <!-- Normaler Bild-Viewer -->
       <div v-else class="normal-viewer d-flex align-center justify-center bg-black">
         <v-img
-          :src="base+image.url"
+          :src="store.getImageUrl(image)"
           :alt="image.label"
           max-height="calc(100vh - 48px)"
           contain
@@ -49,8 +49,10 @@
 import { ref, watch, nextTick, onUnmounted } from 'vue'
 import type { PatternImage } from '@/types/pattern'
 import OpenSeadragon from 'openseadragon'
+import { usePatternStore } from '@/stores/patternStore'
 
-const base = "https://udqxjkmnrefvkeuueoce.supabase.co/storage/v1/object/public/jacqsuite-images/"
+const store = usePatternStore()
+
 const props = defineProps<{
   image: PatternImage
 }>()
@@ -63,10 +65,11 @@ watch(dialog, async (open) => {
   if (open && props.image.highres) {
     await nextTick()
     if (osdContainer.value && !viewer) {
+      const image_url = store.getImageUrl(props.image)
       viewer = OpenSeadragon({
         element: osdContainer.value,
         prefixUrl: "/jacq-suite-web/openseadragon/images/",
-        tileSources: props.image.url.endsWith(".dzi") ? base+props.image.url : {type: 'image', url: base+props.image.url },
+        tileSources: image_url.endsWith(".dzi") ? image_url : {type: 'image', url: image_url },
         showNavigationControl: true,
         showNavigator: true,
         navigatorPosition: 'BOTTOM_RIGHT',

@@ -116,7 +116,7 @@
             <v-card rounded="lg" class="mb-4 overflow-hidden">
               <ImageViewer :image="activeImage">
                 <v-img
-                  :src="'https://udqxjkmnrefvkeuueoce.supabase.co/storage/v1/object/public/jacqsuite-images/'+activeImage.thumbnailUrl"
+                  :src="store.getImageThumbnailUrl(activeImage)"
                   :alt="activeImage.label"
                   height="420"
                   cover
@@ -171,7 +171,7 @@
                 @click="activeImage = img"
               >
                 <v-img
-                  :src="'https://udqxjkmnrefvkeuueoce.supabase.co/storage/v1/object/public/jacqsuite-images/'+img.thumbnailUrl"
+                  :src="store.getImageThumbnailUrl(img)"
                   :alt="img.label"
                   width="90"
                   height="68"
@@ -340,7 +340,7 @@
               <tr v-for="img in pattern.images" :key="img.id">
                 <td class="py-2">
                   <v-img
-                    :src="'https://udqxjkmnrefvkeuueoce.supabase.co/storage/v1/object/public/jacqsuite-images/'+img.thumbnailUrl"
+                    :src="store.getImageThumbnailUrl(img)"
                     width="60"
                     height="45"
                     cover

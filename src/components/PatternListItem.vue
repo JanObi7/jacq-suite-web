@@ -3,7 +3,7 @@
     <div class="d-flex align-stretch">
       <!-- Thumbnail -->
       <v-img
-        :src="thumbnailUrl"
+        :src="store.getThumbnailUrl(pattern)"
         :alt="pattern.title"
         width="140"
         min-width="140"
@@ -75,19 +75,16 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { usePatternStore } from '@/stores/patternStore'
 import type { Pattern, PatternImage } from '@/types/pattern'
+
+const store = usePatternStore()
 
 const props = defineProps<{
   pattern: Pattern
 }>()
 
 const images = <PatternImage[]>[]
-
-const thumbnailUrl = computed(
-  () => {
-    return "https://udqxjkmnrefvkeuueoce.supabase.co/storage/v1/object/public/jacqsuite-images/" + props.pattern.inventory_number + "/symbol.png"
-  }
-)
 
 const hasHighResImage = computed(() => images.some((img) => img.highres))
 

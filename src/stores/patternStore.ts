@@ -2,9 +2,11 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { supabase } from '@/stores/supabase'
 
-import type { Pattern } from '@/types/pattern'
+import type { Pattern, PatternImage, ImageRole } from '@/types/pattern'
 
 export const usePatternStore = defineStore('patterns', () => {
+  const imagebase = "https://udqxjkmnrefvkeuueoce.supabase.co/storage/v1/object/public/jacqsuite-images/"
+
   const patterns = ref<Pattern[]>([])
   const isLoading = ref(false)
   const loadError = ref<string | null>(null)
@@ -95,6 +97,23 @@ export const usePatternStore = defineStore('patterns', () => {
     return patterns.value.find((p) => p.id === id)
   }
 
+  function getThumbnailUrl(pattern: Pattern): string {
+    const thumbImage = pattern.images?.find((img) => img.role === 'thumbnail')
+    const url = thumbImage?.thumbnailUrl || ''
+    return url ? imagebase+url : ''
+  }
+
+  function getImageUrl(image: PatternImage): string {
+    const url = image?.url || ''
+    return url ? imagebase+url : ''
+  }
+
+  function getImageThumbnailUrl(image: PatternImage): string {
+    const url = image?.thumbnailUrl || ''
+    return url ? imagebase+url : ''
+  }
+
+
   function resetFilters() {
     searchQuery.value = ''
     filterDesigner.value = ''
@@ -141,6 +160,112 @@ export const usePatternStore = defineStore('patterns', () => {
     return newPattern
   }
 
+  async function uploadPatternImage(
+    patternId: string,
+    file: File,
+    meta: { role: ImageRole; label: string },
+  ): Promise<void> {
+    // 1) Datei in Supabase Storage hochladen
+    const filePath = `${patternId}/${Date.now()}_${file.name}`
+    const { error: uploadError } = await supabase.storage
+      .from('jacqsuite-images')
+      .upload(filePath, file)
+    if (uploadError) throw uploadError
+
+    // 2) (Optional) Bildgröße bestimmen - hier ggf. noch per Image() / Backend lösen
+    let width: number | undefined
+    let height: number | undefined
+    await new Promise<void>((resolve) => {
+      const img = new Image()
+      img.onload = () => {
+        width = img.width
+        height = img.height
+        resolve()
+      }
+      img.onerror = () => resolve()
+      img.src = URL.createObjectURL(file)
+    })
+
+    const highres = !!(width && height && width > 15000 && height > 10000)
+
+    // 3) Datensatz in pattern_images anlegen
+    const { data, error } = await supabase
+      .from('pattern_images')
+      .insert({
+        pattern_id: patternId,
+        url: filePath,
+        thumbnailUrl: filePath, // TODO: echte Thumbnail-Generierung, falls vorhanden
+        role: meta.role,
+        label: meta.label,
+        width,
+        height,
+        highres,
+      })
+      .select('*')
+      .single()
+    if (error) throw error
+
+    const newImage = data as PatternImage
+
+    // 4) Lokalen Store aktualisieren
+    const pattern = patterns.value.find((p) => p.id === patternId)
+    if (pattern) {
+      pattern.images = [...(pattern.images ?? []), newImage]
+    }
+  }
+
+  async function updatePatternImage(
+    imageId: string,
+    updates: Partial<Pick<PatternImage, 'role' | 'label' | 'highres' | 'width' | 'height'>>,
+  ): Promise<void> {
+    const { error } = await supabase
+      .from('pattern_images')
+      .update(updates)
+      .eq('id', imageId)
+    if (error) throw error
+
+    // lokalen State aktualisieren
+    for (const pattern of patterns.value) {
+      const idx = pattern.images?.findIndex((img) => img.id === imageId) ?? -1
+      if (idx !== -1 && pattern.images) {
+        pattern.images[idx] = { ...pattern.images[idx], ...updates }
+        break
+      }
+    }
+  }
+
+  async function deletePatternImage(imageId: string): Promise<void> {
+    // zuerst Bildpfad finden
+    let target: { patternId: string; url: string } | null = null
+    for (const p of patterns.value) {
+      const img = p.images?.find((i) => i.id === imageId)
+      if (img) {
+        target = { patternId: p.id, url: img.url }
+        break
+      }
+    }
+
+    // DB-Eintrag löschen
+    const { error } = await supabase
+      .from('pattern_images')
+      .delete()
+      .eq('id', imageId)
+    if (error) throw error
+
+    // Storage-Datei löschen (falls gefunden)
+    if (target) {
+      await supabase.storage
+        .from('jacqsuite-images')
+        .remove([target.url])
+    }
+
+    // Lokalen Store aktualisieren
+    patterns.value = patterns.value.map((p) => ({
+      ...p,
+      images: p.images?.filter((img) => img.id !== imageId),
+    }))
+  }
+
   // Muster-Metadaten in Supabase aktualisieren
   async function updatePattern(
     id: string,
@@ -176,9 +301,16 @@ export const usePatternStore = defineStore('patterns', () => {
     latestPatterns,
     loadPatterns,
     getPatternById,
+    getThumbnailUrl,
+    getImageUrl,
+    getImageThumbnailUrl,
+
     resetFilters,
     createPattern,
     updatePattern,
     deletePattern,
+    uploadPatternImage,
+    updatePatternImage,
+    deletePatternImage,
   }
 })
