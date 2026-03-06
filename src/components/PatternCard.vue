@@ -7,7 +7,7 @@
   >
     <!-- Bild -->
     <v-img
-      :src="store.getThumbnailUrl(pattern)"
+      :src="store.getSymbolUrl(pattern)"
       :alt="pattern.title"
       height="200"
       cover
@@ -18,17 +18,6 @@
           <v-progress-circular indeterminate color="primary" />
         </div>
       </template>
-      <!-- Badge für hochauflösende Bilder -->
-      <v-chip
-        v-if="hasHighResImage"
-        size="x-small"
-        color="accent"
-        class="position-absolute ma-2"
-        style="top: 0; right: 0"
-        prepend-icon="mdi-magnify-plus"
-      >
-        HD
-      </v-chip>
     </v-img>
 
     <v-card-item>
@@ -86,10 +75,6 @@ const store = usePatternStore()
 const props = defineProps<{
   pattern: Pattern
 }>()
-
-const hasHighResImage = computed(
-  () => props.pattern.images?.some((img) => img.highres)
-)
 
 function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString('de-DE', {

@@ -32,7 +32,7 @@
           <h1 class="text-h4 font-weight-bold mb-1">{{ pattern.title }}</h1>
           <div class="text-body-2 opacity-80">
             <v-icon icon="mdi-identifier" size="16" class="mr-1" />
-            {{ pattern.inventory_number }}
+            {{ pattern.inventory }}
           </div>
         </v-container>
       </v-sheet>
@@ -236,29 +236,100 @@
                 </v-card-text>
               </v-card>
 
-              <!-- Vorschau-Thumbnail -->
+              <!-- Symbolbild -->
               <v-card rounded="lg" class="mb-6">
                 <v-card-title class="text-body-1 font-weight-bold">
                   <v-icon icon="mdi-image-outline" class="mr-2" />
-                  Vorschaubild
+                  Symbolbild
                 </v-card-title>
                 <v-divider />
                 <v-card-text class="text-center">
+
+                  <!-- Vorschau: neues Bild oder bestehendes -->
                   <v-img
-                    v-if="store.getThumbnailUrl(pattern)"
-                    :src="store.getThumbnailUrl(pattern)"
+                    :src="symbolPreviewUrl || store.getSymbolUrl(pattern)"
                     :alt="pattern.title"
                     height="180"
                     cover
                     rounded="lg"
-                    class="bg-grey-lighten-3 mb-2"
+                    class="bg-grey-lighten-3 mb-3"
+                  >
+                    <template #placeholder>
+                      <div class="d-flex align-center justify-center fill-height">
+                        <v-icon icon="mdi-image-off-outline" size="48" color="grey" />
+                      </div>
+                    </template>
+                    <!-- Badge: neues Bild ausgewählt -->
+                    <v-chip
+                      v-if="symbolPreviewUrl"
+                      color="success"
+                      size="x-small"
+                      variant="flat"
+                      class="position-absolute ma-2"
+                      style="top: 0; right: 0"
+                      prepend-icon="mdi-check"
+                    >
+                      Neu
+                    </v-chip>
+                  </v-img>
+
+                  <!-- Info zum verarbeiteten Bild -->
+                  <div v-if="symbolPreviewUrl" class="text-caption text-medium-emphasis mb-3">
+                    500 × 500 px · WebP · quadratisch zugeschnitten
+                  </div>
+
+                  <!-- Datei-Auswahl -->
+                  <v-file-input
+                    v-model="symbolFile"
+                    label="Bild auswählen"
+                    accept="image/*"
+                    prepend-icon=""
+                    prepend-inner-icon="mdi-image-plus-outline"
+                    variant="outlined"
+                    density="compact"
+                    hide-details
+                    class="mb-3"
+                    :disabled="symbolUploading"
+                    @update:model-value="onSymbolFileSelected"
                   />
-                  <div v-else class="d-flex align-center justify-center bg-grey-lighten-3 rounded-lg mb-2" style="height: 180px">
-                    <v-icon icon="mdi-image-off-outline" size="48" color="grey" />
-                  </div>
-                  <div class="text-caption text-medium-emphasis">
-                    {{ pattern.images?.length ?? 0 }} Bild{{ (pattern.images?.length ?? 0) !== 1 ? 'er' : '' }} vorhanden
-                  </div>
+
+                  <!-- Fehler bei Verarbeitung -->
+                  <v-alert
+                    v-if="symbolProcessError"
+                    type="error"
+                    variant="tonal"
+                    density="compact"
+                    class="mb-3 text-left"
+                    closable
+                    @click:close="symbolProcessError = ''"
+                  >
+                    {{ symbolProcessError }}
+                  </v-alert>
+
+                  <!-- Upload-Button -->
+                  <v-btn
+                    v-if="symbolBlob"
+                    color="primary"
+                    variant="tonal"
+                    prepend-icon="mdi-cloud-upload-outline"
+                    block
+                    :loading="symbolUploading"
+                    @click="uploadSymbol"
+                  >
+                    Symbolbild hochladen
+                  </v-btn>
+
+                  <!-- Erfolg -->
+                  <v-alert
+                    v-if="symbolUploadSuccess"
+                    type="success"
+                    variant="tonal"
+                    density="compact"
+                    class="mt-3 text-left"
+                  >
+                    Symbolbild erfolgreich gespeichert.
+                  </v-alert>
+
                 </v-card-text>
               </v-card>
 
@@ -313,10 +384,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted, watch } from 'vue'
+import { ref, reactive, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { usePatternStore } from '@/stores/patternStore'
 import { useAuthStore } from '@/stores/authStore'
+import { useImageProcessor } from '@/composables/useImageProcessor'
 import PatternImagesEditor from '@/components/PatternImagesEditor.vue'
 
 const route = useRoute()
@@ -398,7 +470,63 @@ const rules = {
 // Formular-Ref für Validierung
 const formRef = ref<{ validate: () => Promise<{ valid: boolean }> } | null>(null)
 
-// Status
+// ── Symbolbild-Upload ──────────────────────────────────────────────────────
+const { cropSquareAndConvert, createPreviewUrl } = useImageProcessor()
+
+const symbolFile = ref<File | File[] | null>(null)
+const symbolBlob = ref<Blob | null>(null)
+const symbolPreviewUrl = ref<string>('')
+const symbolUploading = ref(false)
+const symbolProcessError = ref('')
+const symbolUploadSuccess = ref(false)
+
+// Vorschau-URL beim Verlassen der Seite freigeben
+onUnmounted(() => {
+  if (symbolPreviewUrl.value) URL.revokeObjectURL(symbolPreviewUrl.value)
+})
+
+async function onSymbolFileSelected(value: File | File[] | null) {
+  // Alte Vorschau freigeben
+  if (symbolPreviewUrl.value) {
+    URL.revokeObjectURL(symbolPreviewUrl.value)
+    symbolPreviewUrl.value = ''
+  }
+  symbolBlob.value = null
+  symbolProcessError.value = ''
+  symbolUploadSuccess.value = false
+
+  const file = Array.isArray(value) ? value[0] : value
+  if (!file) return
+
+  try {
+    // Bild verarbeiten: center-crop → 500×500 → WebP
+    const blob = await cropSquareAndConvert(file, 500, 0.88)
+    symbolBlob.value = blob
+    symbolPreviewUrl.value = createPreviewUrl(blob)
+  } catch (e) {
+    symbolProcessError.value = e instanceof Error ? e.message : 'Bildverarbeitung fehlgeschlagen.'
+  }
+}
+
+async function uploadSymbol() {
+  if (!symbolBlob.value || !pattern.value) return
+  symbolUploading.value = true
+  symbolProcessError.value = ''
+  symbolUploadSuccess.value = false
+  try {
+    await store.uploadSymbolImage(pattern.value.id, symbolBlob.value)
+    symbolUploadSuccess.value = true
+    // Dateiauswahl zurücksetzen, Vorschau bleibt sichtbar
+    symbolFile.value = null
+    symbolBlob.value = null
+  } catch (e) {
+    symbolProcessError.value = e instanceof Error ? e.message : 'Upload fehlgeschlagen.'
+  } finally {
+    symbolUploading.value = false
+  }
+}
+
+// ── Metadaten speichern ────────────────────────────────────────────────────
 const saving = ref(false)
 const successMsg = ref('')
 const errorMsg = ref('')

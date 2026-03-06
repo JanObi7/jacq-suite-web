@@ -5,8 +5,6 @@ import { supabase } from '@/stores/supabase'
 import type { Pattern, PatternImage, ImageRole } from '@/types/pattern'
 
 export const usePatternStore = defineStore('patterns', () => {
-  const imagebase = "https://udqxjkmnrefvkeuueoce.supabase.co/storage/v1/object/public/jacqsuite-images/"
-
   const patterns = ref<Pattern[]>([])
   const isLoading = ref(false)
   const loadError = ref<string | null>(null)
@@ -24,8 +22,8 @@ export const usePatternStore = defineStore('patterns', () => {
     try {
       let query = supabase
         .from('patterns')
-        .select(`id, title, description, inventory_number, year, location, technique,designer,
-          digitized_at, digitized_by, thumbnail_url,labels,
+        .select(`id, title, description, inventory, year, location, technique,designer,
+          digitized_at, digitized_by,labels,
           images:pattern_images(*)`)
         .order('year', { ascending: false })
 
@@ -97,20 +95,22 @@ export const usePatternStore = defineStore('patterns', () => {
     return patterns.value.find((p) => p.id === id)
   }
 
-  function getThumbnailUrl(pattern: Pattern): string {
-    const thumbImage = pattern.images?.find((img) => img.role === 'thumbnail')
-    const url = thumbImage?.thumbnailUrl || ''
-    return url ? imagebase+url : ''
+  function getSymbolUrl(pattern: Pattern): string {
+    return supabase.storage.from('jacqsuite-images').getPublicUrl(`${pattern.id}/symbol.webp`).data.publicUrl
   }
 
   function getImageUrl(image: PatternImage): string {
-    const url = image?.url || ''
-    return url ? imagebase+url : ''
+    if (!image.filename || !image.pattern_id) return ''
+    return supabase.storage
+      .from('jacqsuite-images')
+      .getPublicUrl(`${image.pattern_id}/${image.filename}`).data.publicUrl
   }
 
-  function getImageThumbnailUrl(image: PatternImage): string {
-    const url = image?.thumbnailUrl || ''
-    return url ? imagebase+url : ''
+  function getThumbnailUrl(image: PatternImage): string {
+    if (!image.filename || !image.pattern_id) return ''
+    return supabase.storage
+      .from('jacqsuite-images')
+      .getPublicUrl(`${image.pattern_id}/${image.filename}.webp`).data.publicUrl
   }
 
 
@@ -145,13 +145,13 @@ export const usePatternStore = defineStore('patterns', () => {
 
   // Neues Muster in Supabase anlegen
   async function createPattern(
-    data: Pick<Pattern, 'title' | 'description' | 'inventory_number' | 'year' | 'designer' | 'location' | 'technique' | 'labels' | 'digitized_at' | 'digitized_by'>,
+    data: Pick<Pattern, 'title' | 'description' | 'inventory' | 'year' | 'designer' | 'location' | 'technique' | 'labels' | 'digitized_at' | 'digitized_by'>,
   ): Promise<Pattern> {
     const { data: created, error } = await supabase
       .from('patterns')
-      .insert({ ...data, thumbnail_url: '' })
-      .select(`id, title, description, inventory_number, year, location, technique, designer,
-        digitized_at, digitized_by, thumbnail_url, labels,
+      .insert(data)
+      .select(`id, title, description, inventory, year, location, technique, designer,
+        digitized_at, digitized_by, labels,
         images:pattern_images(*)`)
       .single()
     if (error) throw error
@@ -160,46 +160,84 @@ export const usePatternStore = defineStore('patterns', () => {
     return newPattern
   }
 
+  /**
+   * Hilfsfunktion: Bild auf max. maxSize px (längere Seite) verkleinern,
+   * Seitenverhältnis erhalten, als WebP-Blob zurückgeben.
+   */
+  function _resizeToWebP(file: File, maxSize = 500, quality = 0.88): Promise<{ blob: Blob; width: number; height: number }> {
+    return new Promise((resolve, reject) => {
+      const img = new Image()
+      img.onerror = () => reject(new Error('Bild konnte nicht geladen werden.'))
+      img.onload = () => {
+        let targetW: number
+        let targetH: number
+        if (img.width >= img.height) {
+          targetW = Math.min(img.width, maxSize)
+          targetH = Math.round((img.height / img.width) * targetW)
+        } else {
+          targetH = Math.min(img.height, maxSize)
+          targetW = Math.round((img.width / img.height) * targetH)
+        }
+        const canvas = document.createElement('canvas')
+        canvas.width = targetW
+        canvas.height = targetH
+        const ctx = canvas.getContext('2d')
+        if (!ctx) { reject(new Error('Canvas nicht verfügbar.')); return }
+        ctx.drawImage(img, 0, 0, targetW, targetH)
+        canvas.toBlob(
+          (blob) => {
+            if (blob) resolve({ blob, width: targetW, height: targetH })
+            else reject(new Error('WebP-Konvertierung fehlgeschlagen.'))
+          },
+          'image/webp',
+          quality,
+        )
+      }
+      img.src = URL.createObjectURL(file)
+    })
+  }
+
   async function uploadPatternImage(
     patternId: string,
     file: File,
     meta: { role: ImageRole; label: string },
   ): Promise<void> {
-    // 1) Datei in Supabase Storage hochladen
-    const filePath = `${patternId}/${Date.now()}_${file.name}`
-    const { error: uploadError } = await supabase.storage
-      .from('jacqsuite-images')
-      .upload(filePath, file)
-    if (uploadError) throw uploadError
+    // Dateiname ohne Sonderzeichen
+    const safeFilename = file.name.replace(/[^a-zA-Z0-9._-]/g, '_')
+    const originalPath = `${patternId}/${safeFilename}`
+    const thumbnailPath = `${patternId}/${safeFilename}.webp`
 
-    // 2) (Optional) Bildgröße bestimmen - hier ggf. noch per Image() / Backend lösen
-    let width: number | undefined
-    let height: number | undefined
-    await new Promise<void>((resolve) => {
+    // 1) Originalgröße bestimmen
+    const origSize = await new Promise<{ width: number; height: number }>((resolve) => {
       const img = new Image()
-      img.onload = () => {
-        width = img.width
-        height = img.height
-        resolve()
-      }
-      img.onerror = () => resolve()
+      img.onload = () => resolve({ width: img.width, height: img.height })
+      img.onerror = () => resolve({ width: 0, height: 0 })
       img.src = URL.createObjectURL(file)
     })
 
-    const highres = !!(width && height && width > 15000 && height > 10000)
+    // 2) Original-Datei hochladen
+    const { error: origError } = await supabase.storage
+      .from('jacqsuite-images')
+      .upload(originalPath, file, { upsert: true })
+    if (origError) throw origError
 
-    // 3) Datensatz in pattern_images anlegen
+    // 3) WebP-Thumbnail erzeugen und hochladen
+    const { blob: thumbBlob } = await _resizeToWebP(file, 500, 0.88)
+    const { error: thumbError } = await supabase.storage
+      .from('jacqsuite-images')
+      .upload(thumbnailPath, thumbBlob, { contentType: 'image/webp', upsert: true })
+    if (thumbError) throw thumbError
+
+    // 4) Datensatz in pattern_images anlegen
     const { data, error } = await supabase
       .from('pattern_images')
       .insert({
         pattern_id: patternId,
-        url: filePath,
-        thumbnailUrl: filePath, // TODO: echte Thumbnail-Generierung, falls vorhanden
+        filename: safeFilename,
         role: meta.role,
         label: meta.label,
-        width,
-        height,
-        highres,
+        width: origSize.width,
+        height: origSize.height,
       })
       .select('*')
       .single()
@@ -207,7 +245,7 @@ export const usePatternStore = defineStore('patterns', () => {
 
     const newImage = data as PatternImage
 
-    // 4) Lokalen Store aktualisieren
+    // 5) Lokalen Store aktualisieren
     const pattern = patterns.value.find((p) => p.id === patternId)
     if (pattern) {
       pattern.images = [...(pattern.images ?? []), newImage]
@@ -216,7 +254,7 @@ export const usePatternStore = defineStore('patterns', () => {
 
   async function updatePatternImage(
     imageId: string,
-    updates: Partial<Pick<PatternImage, 'role' | 'label' | 'highres' | 'width' | 'height'>>,
+    updates: Partial<Pick<PatternImage, 'role' | 'label' | 'width' | 'height'>>,
   ): Promise<void> {
     const { error } = await supabase
       .from('pattern_images')
@@ -228,19 +266,19 @@ export const usePatternStore = defineStore('patterns', () => {
     for (const pattern of patterns.value) {
       const idx = pattern.images?.findIndex((img) => img.id === imageId) ?? -1
       if (idx !== -1 && pattern.images) {
-        pattern.images[idx] = { ...pattern.images[idx], ...updates }
+        pattern.images[idx] = { ...pattern.images[idx], ...updates } as PatternImage
         break
       }
     }
   }
 
   async function deletePatternImage(imageId: string): Promise<void> {
-    // zuerst Bildpfad finden
-    let target: { patternId: string; url: string } | null = null
+    // Bildpfad und patternId finden
+    let target: { patternId: string; filename: string } | null = null
     for (const p of patterns.value) {
       const img = p.images?.find((i) => i.id === imageId)
       if (img) {
-        target = { patternId: p.id, url: img.url }
+        target = { patternId: p.id, filename: img.filename }
         break
       }
     }
@@ -252,11 +290,13 @@ export const usePatternStore = defineStore('patterns', () => {
       .eq('id', imageId)
     if (error) throw error
 
-    // Storage-Datei löschen (falls gefunden)
+    // Storage-Dateien löschen (Original + WebP-Thumbnail)
     if (target) {
+      const originalPath = `${target.patternId}/${target.filename}`
+      const thumbnailPath = `${target.patternId}/${target.filename}.webp`
       await supabase.storage
         .from('jacqsuite-images')
-        .remove([target.url])
+        .remove([originalPath, thumbnailPath])
     }
 
     // Lokalen Store aktualisieren
@@ -264,6 +304,20 @@ export const usePatternStore = defineStore('patterns', () => {
       ...p,
       images: p.images?.filter((img) => img.id !== imageId),
     }))
+  }
+
+  // Symbolbild hochladen: bereits verarbeiteter WebP-Blob → Storage unter <patternId>/symbol.webp
+  async function uploadSymbolImage(patternId: string, blob: Blob): Promise<void> {
+    const filePath = `${patternId}/symbol.webp`
+
+    // upsert: überschreibt vorhandene Datei
+    const { error: uploadError } = await supabase.storage
+      .from('jacqsuite-images')
+      .upload(filePath, blob, {
+        contentType: 'image/webp',
+        upsert: true,
+      })
+    if (uploadError) throw uploadError
   }
 
   // Muster-Metadaten in Supabase aktualisieren
@@ -301,9 +355,9 @@ export const usePatternStore = defineStore('patterns', () => {
     latestPatterns,
     loadPatterns,
     getPatternById,
-    getThumbnailUrl,
+    getSymbolUrl,
     getImageUrl,
-    getImageThumbnailUrl,
+    getThumbnailUrl,
 
     resetFilters,
     createPattern,
@@ -312,5 +366,6 @@ export const usePatternStore = defineStore('patterns', () => {
     uploadPatternImage,
     updatePatternImage,
     deletePatternImage,
+    uploadSymbolImage,
   }
 })

@@ -184,8 +184,8 @@ import PatternCard from '@/components/PatternCard.vue'
 import PatternListItem from '@/components/PatternListItem.vue'
 
 const store = usePatternStore()
-const viewMode = ref<'grid' | 'list'>('list')
-const sortBy = ref('digitizedAt_desc')
+const viewMode = ref<'grid' | 'list'>('grid')
+const sortBy = ref('name_asc')
 
 // Daten beim Mounten laden
 onMounted(() => {

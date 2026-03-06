@@ -66,7 +66,7 @@
                   </v-col>
                   <v-col cols="12" sm="4">
                     <v-text-field
-                      v-model="form.inventory_number"
+                      v-model="form.inventory"
                       label="Inventarnummer *"
                       prepend-inner-icon="mdi-identifier"
                       variant="outlined"
@@ -291,7 +291,7 @@ onMounted(() => {
 // Formular-State
 const form = reactive({
   title: '',
-  inventory_number: '',
+  inventory: '',
   description: '',
   year: new Date().getFullYear(),
   designer: '',
@@ -327,7 +327,7 @@ async function handleSave() {
   try {
     const newPattern = await store.createPattern({
       title: form.title,
-      inventory_number: form.inventory_number,
+      inventory: form.inventory,
       description: form.description,
       year: form.year,
       designer: form.designer,

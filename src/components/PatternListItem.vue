@@ -3,10 +3,11 @@
     <div class="d-flex align-stretch">
       <!-- Thumbnail -->
       <v-img
-        :src="store.getThumbnailUrl(pattern)"
+        :src="store.getSymbolUrl(pattern)"
         :alt="pattern.title"
-        width="140"
+        width="200"
         min-width="140"
+        max-width="200"
         cover
         class="rounded-s-lg bg-grey-lighten-3 flex-shrink-0"
       >
@@ -28,9 +29,6 @@
               </div>
             </div>
             <!-- <div class="d-flex flex-column align-end ga-1 flex-shrink-0">
-              <v-chip v-if="hasHighResImage" size="x-small" color="accent" prepend-icon="mdi-magnify-plus">
-                HD
-              </v-chip>
               <v-chip size="x-small" variant="tonal" color="secondary">
                 {{ pattern.images.length }} Bild{{ pattern.images.length !== 1 ? 'er' : '' }}
               </v-chip>
@@ -83,10 +81,6 @@ const store = usePatternStore()
 const props = defineProps<{
   pattern: Pattern
 }>()
-
-const images = <PatternImage[]>[]
-
-const hasHighResImage = computed(() => images.some((img) => img.highres))
 
 function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString('de-DE', {
