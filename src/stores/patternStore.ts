@@ -323,7 +323,7 @@ export const usePatternStore = defineStore('patterns', () => {
   // Muster-Metadaten in Supabase aktualisieren
   async function updatePattern(
     id: string,
-    updates: Partial<Pick<Pattern, 'title' | 'description' | 'year' | 'designer' | 'location' | 'technique' | 'labels' | 'digitized_at' | 'digitized_by'>>,
+    updates: Partial<Pick<Pattern, 'title' | 'inventory' | 'description' | 'year' | 'designer' | 'location' | 'technique' | 'labels' | 'digitized_at' | 'digitized_by'>>,
   ): Promise<void> {
     const { error } = await supabase
       .from('patterns')
