@@ -211,7 +211,6 @@
                   <v-list-item-title class="text-caption text-medium-emphasis">Technik</v-list-item-title>
                   <v-list-item-subtitle class="text-body-2 font-weight-medium">{{ pattern.technique }}</v-list-item-subtitle>
                 </v-list-item>
-                <v-divider inset />
               </v-list>
             </v-card>
 
@@ -246,6 +245,16 @@
               </v-card-title>
               <v-divider />
               <v-list density="compact">
+                <v-list-item>
+                  <template #prepend>
+                    <v-icon icon="mdi-identifier" color="primary" size="20" />
+                  </template>
+                  <v-list-item-title class="text-caption text-medium-emphasis">Inventarnummer</v-list-item-title>
+                  <v-list-item-subtitle class="text-body-2 font-weight-medium">
+                    {{ pattern.inventory }}
+                  </v-list-item-subtitle>
+                </v-list-item>
+                <v-divider inset />
                 <v-list-item>
                   <template #prepend>
                     <v-icon icon="mdi-account-outline" color="primary" size="20" />
