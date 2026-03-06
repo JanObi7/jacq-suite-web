@@ -76,11 +76,22 @@
                 <v-divider />
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12">
+                    <v-col cols="12" sm="8">
                       <v-text-field
                         v-model="form.title"
                         label="Titel"
                         prepend-inner-icon="mdi-format-title"
+                        variant="outlined"
+                        density="comfortable"
+                        :rules="[rules.required]"
+                        :disabled="saving"
+                      />
+                    </v-col>
+                    <v-col cols="12" sm="4">
+                      <v-text-field
+                        v-model="form.inventory"
+                        label="Inventarnummer"
+                        prepend-inner-icon="mdi-identifier"
                         variant="outlined"
                         density="comfortable"
                         :rules="[rules.required]"
@@ -406,6 +417,7 @@ const pattern = computed(() => store.getPatternById(route.params.id as string))
 // Formular-State (lokale Kopie des Musters)
 const form = reactive({
   title: '',
+  inventory: '',
   description: '',
   year: 0,
   designer: '',
@@ -422,6 +434,7 @@ watch(
   (p) => {
     if (p) {
       form.title = p.title
+      form.inventory = p.inventory
       form.description = p.description
       form.year = p.year
       form.designer = p.designer
@@ -441,6 +454,7 @@ const isDirty = computed(() => {
   if (!pattern.value) return false
   return (
     form.title !== pattern.value.title ||
+    form.inventory !== pattern.value.inventory ||
     form.description !== pattern.value.description ||
     form.year !== pattern.value.year ||
     form.designer !== pattern.value.designer ||
@@ -544,6 +558,7 @@ async function handleSave() {
   try {
     await store.updatePattern(pattern.value.id, {
       title: form.title,
+      inventory: form.inventory,
       description: form.description,
       year: form.year,
       designer: form.designer,
