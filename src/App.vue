@@ -17,7 +17,7 @@
         variant="text" 
         color="white" 
         prepend-icon="mdi-home"
-        class="d-none d-sm-flex"
+        class="d-none d-md-flex mx-1"
       >
         Startseite
       </v-btn>
@@ -26,9 +26,19 @@
         variant="text" 
         color="white" 
         prepend-icon="mdi-view-grid"
-        class="d-none d-sm-flex"
+        class="d-none d-md-flex mx-1"
       >
         Alle Muster
+      </v-btn>
+      <v-btn
+        v-if="auth.isAdmin"
+        to="/patterns/create"
+        variant="tonal"
+        color="white"
+        prepend-icon="mdi-plus"
+        class="d-none d-md-flex mx-1"
+      >
+        Neues Muster
       </v-btn>
 
       <!-- Mobile: Nur Icons -->
@@ -37,14 +47,22 @@
         icon="mdi-home"
         variant="text" 
         color="white"
-        class="d-sm-none"
+        class="d-md-none"
       />
       <v-btn 
         to="/patterns" 
         icon="mdi-view-grid"
         variant="text" 
         color="white"
-        class="d-sm-none"
+        class="d-md-none"
+      />
+      <v-btn
+        v-if="auth.isAdmin"
+        to="/patterns/create"
+        icon="mdi-plus-thick"
+        variant="text"
+        color="white"
+        class="d-md-none mx-1"
       />
 
       <v-btn
@@ -53,6 +71,41 @@
         color="white"
         @click="toggleTheme"
       />
+      <!-- Auth -->
+      <template v-if="auth.user">
+        <v-menu>
+          <template #activator="{ props }">
+            <v-btn v-bind="props" variant="text" class="ml-1" color="white" icon="mdi-account"/>
+              <!-- <v-avatar size="32" color="white">
+                <span class="text-caption font-weight-bold">{{ initials }}</span>
+              </v-avatar> -->
+            <!-- </v-btn> -->
+          </template>
+          <v-list min-width="180" density="compact">
+            <v-list-item
+              prepend-icon="mdi-account"
+              :title="auth.profile?.display_name ?? auth.user.email"
+            />
+            <v-divider />
+            <v-list-item
+              prepend-icon="mdi-shield-account"
+              :title="roleLabel"
+              density="compact"
+            />
+            <v-divider />
+            <v-list-item
+              prepend-icon="mdi-logout"
+              title="Abmelden"
+              @click="auth.signOut()"
+            />
+          </v-list>
+        </v-menu>
+      </template>
+      <template v-else>
+        <v-btn to="/login" prepend-icon="mdi-login" variant="text" color="white" class="ml-1">
+          Anmelden
+        </v-btn>
+      </template>
     </v-app-bar>
 
     <!-- Navigation Drawer (Mobile) -->
@@ -77,6 +130,13 @@
           to="/patterns"
           @click="drawer = false"
         />
+        <v-list-item
+          v-if="auth.isAdmin"
+          prepend-icon="mdi-plus-circle-outline"
+          title="Neues Muster"
+          to="/patterns/create"
+          @click="drawer = false"
+        />
       </v-list>
     </v-navigation-drawer>
 
@@ -95,7 +155,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
+
+const auth = useAuthStore()
+auth.init()
 
 const drawer = ref(false)
 const theme = ref<'light' | 'dark'>('light')
@@ -103,4 +167,14 @@ const theme = ref<'light' | 'dark'>('light')
 function toggleTheme() {
   theme.value = theme.value === 'light' ? 'dark' : 'light'
 }
+
+const initials = computed(() => {
+  const name = auth.profile?.display_name ?? auth.user?.email ?? ''
+  return name.slice(0, 2).toUpperCase()
+})
+
+const roleLabel = computed(() => {
+  return auth.profile?.role == 'admin' ? 'Administrator' : 'Benutzer'
+})
+
 </script>

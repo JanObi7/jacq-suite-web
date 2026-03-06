@@ -3,10 +3,11 @@
     <div class="d-flex align-stretch">
       <!-- Thumbnail -->
       <v-img
-        :src="thumbnailImage?.thumbnailUrl || 'https://picsum.photos/seed/placeholder/400/300'"
-        :alt="pattern.name"
-        width="140"
+        :src="store.getSymbolUrl(pattern)"
+        :alt="pattern.title"
+        width="200"
         min-width="140"
+        max-width="200"
         cover
         class="rounded-s-lg bg-grey-lighten-3 flex-shrink-0"
       >
@@ -22,19 +23,16 @@
         <div>
           <div class="d-flex align-start justify-space-between ga-2">
             <div>
-              <div class="text-body-1 font-weight-bold">{{ pattern.name }}</div>
+              <div class="text-body-1 font-weight-bold">{{ pattern.title }}</div>
               <div class="text-caption text-medium-emphasis">
-                {{ pattern.year }} · {{ pattern.designer }} · {{ pattern.technique }} · {{ pattern.origin }}
+                {{ pattern.year }} · {{ pattern.designer }} · {{ pattern.technique }} · {{ pattern.location }}
               </div>
             </div>
-            <div class="d-flex flex-column align-end ga-1 flex-shrink-0">
-              <v-chip v-if="hasHighResImage" size="x-small" color="accent" prepend-icon="mdi-magnify-plus">
-                HD
-              </v-chip>
+            <!-- <div class="d-flex flex-column align-end ga-1 flex-shrink-0">
               <v-chip size="x-small" variant="tonal" color="secondary">
                 {{ pattern.images.length }} Bild{{ pattern.images.length !== 1 ? 'er' : '' }}
               </v-chip>
-            </div>
+            </div> -->
           </div>
 
           <p class="text-body-2 text-medium-emphasis mt-2 description-clamp">
@@ -45,7 +43,7 @@
         <div class="d-flex align-center justify-space-between mt-2 flex-wrap ga-1">
           <div class="d-flex flex-wrap ga-1">
             <v-chip
-              v-for="tag in pattern.tags.slice(0, 4)"
+              v-for="tag in pattern.labels.slice(0, 4)"
               :key="tag"
               size="x-small"
               variant="tonal"
@@ -53,18 +51,18 @@
             >
               {{ tag }}
             </v-chip>
-            <v-chip v-if="pattern.tags.length > 4" size="x-small" variant="tonal" color="secondary">
-              +{{ pattern.tags.length - 4 }}
+            <v-chip v-if="pattern.labels.length > 4" size="x-small" variant="tonal" color="secondary">
+              +{{ pattern.labels.length - 4 }}
             </v-chip>
           </div>
           <div class="d-flex align-center ga-3 text-caption text-medium-emphasis">
             <span>
               <v-icon icon="mdi-account-outline" size="12" class="mr-1" />
-              {{ pattern.digitizedBy }}
+              {{ pattern.digitized_by }}
             </span>
             <span>
               <v-icon icon="mdi-calendar-check-outline" size="12" class="mr-1" />
-              {{ formatDate(pattern.digitizedAt) }}
+              {{ formatDate(pattern.digitized_at) }}
             </span>
           </div>
         </div>
@@ -75,18 +73,14 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { Pattern } from '@/types/pattern'
+import { usePatternStore } from '@/stores/patternStore'
+import type { Pattern, PatternImage } from '@/types/pattern'
+
+const store = usePatternStore()
 
 const props = defineProps<{
   pattern: Pattern
 }>()
-
-const thumbnailImage = computed(
-  () =>
-    props.pattern.images.find((img) => img.role === 'thumbnail') ?? props.pattern.images[0],
-)
-
-const hasHighResImage = computed(() => props.pattern.images.some((img) => img.isHighResolution))
 
 function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString('de-DE', {

@@ -5,12 +5,12 @@
         <slot />
         <div class="image-overlay d-flex align-center justify-center">
           <v-icon
-            :icon="image.isHighResolution ? 'mdi-magnify-scan' : 'mdi-fullscreen'"
+            icon="mdi-fullscreen"
             color="white"
             size="32"
           />
           <span class="text-white text-caption ml-1">
-            {{ image.isHighResolution ? 'Interaktive Ansicht' : 'Vollbild' }}
+            Vollbild
           </span>
         </div>
       </div>
@@ -21,7 +21,7 @@
       <v-toolbar color="primary" density="compact">
         <v-toolbar-title class="text-body-1">
           {{ image.label }}
-          <span v-if="image.isHighResolution" class="text-caption opacity-70 ml-2">
+          <span class="text-caption opacity-70 ml-2">
             ({{ image.width?.toLocaleString('de-DE') }} × {{ image.height?.toLocaleString('de-DE') }} px)
           </span>
         </v-toolbar-title>
@@ -30,17 +30,17 @@
       </v-toolbar>
 
       <!-- OpenSeadragon Viewer für hochauflösende Bilder -->
-      <div v-if="image.isHighResolution" ref="osdContainer" class="osd-container" />
+      <div ref="osdContainer" class="osd-container" />
 
       <!-- Normaler Bild-Viewer -->
-      <div v-else class="normal-viewer d-flex align-center justify-center bg-black">
+      <!-- <div v-else class="normal-viewer d-flex align-center justify-center bg-black">
         <v-img
-          :src="image.url"
+          :src="store.getImageUrl(image)"
           :alt="image.label"
           max-height="calc(100vh - 48px)"
           contain
         />
-      </div>
+      </div> -->
     </v-card>
   </v-dialog>
 </template>
@@ -49,6 +49,9 @@
 import { ref, watch, nextTick, onUnmounted } from 'vue'
 import type { PatternImage } from '@/types/pattern'
 import OpenSeadragon from 'openseadragon'
+import { usePatternStore } from '@/stores/patternStore'
+
+const store = usePatternStore()
 
 const props = defineProps<{
   image: PatternImage
@@ -59,13 +62,14 @@ const osdContainer = ref<HTMLElement | null>(null)
 let viewer: OpenSeadragon.Viewer | null = null
 
 watch(dialog, async (open) => {
-  if (open && props.image.isHighResolution) {
+  if (open) {
     await nextTick()
     if (osdContainer.value && !viewer) {
+      const image_url = store.getImageUrl(props.image)
       viewer = OpenSeadragon({
         element: osdContainer.value,
         prefixUrl: "/jacq-suite-web/openseadragon/images/",
-        tileSources: props.image.url.endsWith(".dzi") ? props.image.url : {type: 'image', url: props.image.url },
+        tileSources: image_url.endsWith(".dzi") ? image_url : {type: 'image', url: image_url },
         showNavigationControl: true,
         showNavigator: true,
         navigatorPosition: 'BOTTOM_RIGHT',

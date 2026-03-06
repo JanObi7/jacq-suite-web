@@ -1,0 +1,302 @@
+<template>
+  <div>
+    <div class="d-flex justify-space-between align-center mb-3">
+      <div class="text-body-2 text-medium-emphasis">
+        {{ images.length }} Bild{{ images.length !== 1 ? 'er' : '' }} vorhanden
+      </div>
+      <v-btn
+        v-if="canEdit"
+        color="primary"
+        size="small"
+        prepend-icon="mdi-upload"
+        @click="showUploadDialog = true"
+      >
+        Bild hochladen
+      </v-btn>
+    </div>
+
+    <v-alert
+      v-if="errorMsg"
+      type="error"
+      variant="tonal"
+      class="mb-3"
+      density="compact"
+      closable
+      @click:close="errorMsg = ''"
+    >
+      {{ errorMsg }}
+    </v-alert>
+
+    <v-list v-if="images.length" density="compact" class="border rounded-lg">
+      <v-list-item
+        v-for="image in images"
+        :key="image.id"
+      >
+        <template #prepend>
+          <v-avatar rounded size="56" class="bg-grey-lighten-3">
+            <v-img :src="store.getThumbnailUrl(image)" :alt="image.label" cover />
+          </v-avatar>
+        </template>
+
+        <v-list-item-title class="text-body-2">
+          {{ image.label || 'Ohne Titel' }}
+        </v-list-item-title>
+        <v-list-item-subtitle class="text-caption">
+          {{ image.role }}
+          <span v-if="image.width && image.height">
+            {{ image.width.toLocaleString('de-DE') }} x {{ image.height.toLocaleString('de-DE') }} px
+          </span>
+        </v-list-item-subtitle>
+
+        <template #append>
+          <v-btn
+            v-if="canEdit"
+            icon="mdi-pencil"
+            variant="text"
+            size="small"
+            @click="editImage(image)"
+          />
+          <v-btn
+            v-if="canEdit"
+            icon="mdi-delete"
+            variant="text"
+            size="small"
+            color="error"
+            @click="confirmDelete(image)"
+          />
+        </template>
+      </v-list-item>
+    </v-list>
+
+    <div v-else class="text-caption text-medium-emphasis">Noch keine Bilder vorhanden.</div>
+
+    <!-- Upload-Dialog -->
+    <v-dialog v-model="showUploadDialog" max-width="600">
+      <v-card>
+        <v-card-title class="text-body-1 font-weight-bold">
+          Neues Bild hochladen
+        </v-card-title>
+        <v-divider />
+        <v-card-text>
+          <v-file-input
+            v-model="uploadFile"
+            label="Bilddatei"
+            accept="image/*,.dzi"
+            prepend-icon="mdi-file-image"
+            variant="outlined"
+            :disabled="uploading"
+          />
+          <v-select
+            v-model="uploadMeta.role"
+            :items="roles"
+            label="Rolle"
+            variant="outlined"
+            class="mt-3"
+            :disabled="uploading"
+          />
+          <v-text-field
+            v-model="uploadMeta.label"
+            label="Label"
+            variant="outlined"
+            class="mt-3"
+            :disabled="uploading"
+          />
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            variant="tonal"
+            color="secondary"
+            @click="showUploadDialog = false"
+            :disabled="uploading"
+          >
+            Abbrechen
+          </v-btn>
+          <v-btn
+            color="primary"
+            @click="handleUpload"
+            :loading="uploading"
+            :disabled="!uploadFile"
+          >
+            Hochladen
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- Edit-Dialog -->
+    <v-dialog v-model="showEditDialog" max-width="600">
+      <v-card v-if="editMeta">
+        <v-card-title class="text-body-1 font-weight-bold">
+          Bild bearbeiten
+        </v-card-title>
+        <v-divider />
+        <v-card-text>
+          <div class="mb-3 d-flex justify-center">
+            <v-img
+              :src="store.getThumbnailUrl(editMeta)"
+              :alt="editMeta.label"
+              max-height="160"
+              contain
+              class="bg-grey-lighten-3 rounded-lg"
+            />
+          </div>
+          <v-select
+            v-model="editMeta.role"
+            :items="roles"
+            label="Rolle"
+            variant="outlined"
+            class="mt-3"
+            :disabled="savingEdit"
+          />
+          <v-text-field
+            v-model="editMeta.label"
+            label="Label"
+            variant="outlined"
+            class="mt-3"
+            :disabled="savingEdit"
+          />
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            variant="tonal"
+            color="secondary"
+            @click="showEditDialog = false"
+            :disabled="savingEdit"
+          >
+            Abbrechen
+          </v-btn>
+          <v-btn
+            color="primary"
+            @click="handleSaveEdit"
+            :loading="savingEdit"
+          >
+            Speichern
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- Delete-Dialog -->
+    <v-dialog v-model="showDeleteDialog" max-width="420">
+      <v-card>
+        <v-card-title class="text-body-1 font-weight-bold">
+          Bild löschen?
+        </v-card-title>
+        <v-card-text>
+          Soll das Bild "{{ deleteTarget?.label || 'Ohne Titel' }}" unwiderruflich gelöscht werden?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            variant="tonal"
+            color="secondary"
+            @click="showDeleteDialog = false"
+            :disabled="deleting"
+          >
+            Abbrechen
+          </v-btn>
+          <v-btn
+            color="error"
+            @click="handleDelete"
+            :loading="deleting"
+          >
+            Löschen
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import { usePatternStore } from '@/stores/patternStore'
+import { useAuthStore } from '@/stores/authStore'
+import type { Pattern, PatternImage, ImageRole } from '@/types/pattern'
+
+const props = defineProps<{
+  pattern: Pattern
+}>()
+
+const store = usePatternStore()
+const auth = useAuthStore()
+
+const canEdit = computed(() => auth.isAdmin || auth.isEditor)
+
+const images = computed(() => props.pattern.images ?? [])
+const roles: ImageRole[] = ['paper', 'digital', 'other']
+
+const showUploadDialog = ref(false)
+const uploadFile = ref<File | null>(null)
+const uploading = ref(false)
+const uploadMeta = ref<{ role: ImageRole; label: string }>({ role: 'other', label: '' })
+
+const showEditDialog = ref(false)
+const editMeta = ref<PatternImage | null>(null)
+const savingEdit = ref(false)
+
+const showDeleteDialog = ref(false)
+const deleteTarget = ref<PatternImage | null>(null)
+const deleting = ref(false)
+
+const errorMsg = ref('')
+
+function editImage(image: PatternImage) {
+  editMeta.value = { ...image }
+  showEditDialog.value = true
+}
+
+function confirmDelete(image: PatternImage) {
+  deleteTarget.value = image
+  showDeleteDialog.value = true
+}
+
+async function handleUpload() {
+  if (!uploadFile.value) return
+  uploading.value = true
+  errorMsg.value = ''
+  try {
+    await store.uploadPatternImage(props.pattern.id, uploadFile.value, uploadMeta.value)
+    showUploadDialog.value = false
+    uploadFile.value = null
+    uploadMeta.value = { role: 'other', label: '' }
+  } catch (e) {
+    errorMsg.value = e instanceof Error ? e.message : 'Upload fehlgeschlagen.'
+  } finally {
+    uploading.value = false
+  }
+}
+
+async function handleSaveEdit() {
+  if (!editMeta.value) return
+  savingEdit.value = true
+  errorMsg.value = ''
+  try {
+    await store.updatePatternImage(editMeta.value.id, {
+      role: editMeta.value.role,
+      label: editMeta.value.label,
+    })
+    showEditDialog.value = false
+  } catch (e) {
+    errorMsg.value = e instanceof Error ? e.message : 'Speichern fehlgeschlagen.'
+  } finally {
+    savingEdit.value = false
+  }
+}
+
+async function handleDelete() {
+  if (!deleteTarget.value) return
+  deleting.value = true
+  errorMsg.value = ''
+  try {
+    await store.deletePatternImage(deleteTarget.value.id)
+    showDeleteDialog.value = false
+  } catch (e) {
+    errorMsg.value = e instanceof Error ? e.message : 'Löschen fehlgeschlagen.'
+  } finally {
+    deleting.value = false
+  }
+}
+</script>
