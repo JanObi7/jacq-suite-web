@@ -29,6 +29,10 @@
         <v-icon icon="mdi-map-marker-outline" size="14" />
         <span>{{ pattern.origin }}</span>
       </div>
+      <div class="d-flex align-center ga-1 mb-2 text-caption text-medium-emphasis">
+        <v-icon icon="mdi-identifier" size="14" />
+        <span>{{ pattern.inventory }}</span>
+      </div>
     </v-card-text>
 
     <v-card-actions class="pt-0">

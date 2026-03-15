@@ -21,18 +21,22 @@
       <!-- Content -->
       <div class="flex-grow-1 pa-3 d-flex flex-column justify-space-between">
         <div>
-          <div class="d-flex align-start justify-space-between ga-2">
+          <div class="d-flex align-start justify-space-between ga-3">
             <div>
               <div class="text-body-1 font-weight-bold">{{ pattern.title }}</div>
               <div class="text-caption text-medium-emphasis">
-                {{ pattern.origin }}
+                <span>
+                  <v-icon icon="mdi-map-marker-outline" size="12" class="mr-1" />
+                  {{ pattern.origin }}
+                </span>
+              </div>
+              <div class="text-caption text-medium-emphasis">
+                <span>
+                  <v-icon icon="mdi-identifier" size="12" class="mr-1" />
+                  {{ pattern.inventory }}
+                </span>
               </div>
             </div>
-            <!-- <div class="d-flex flex-column align-end ga-1 flex-shrink-0">
-              <v-chip size="x-small" variant="tonal" color="secondary">
-                {{ pattern.images.length }} Bild{{ pattern.images.length !== 1 ? 'er' : '' }}
-              </v-chip>
-            </div> -->
           </div>
 
           <p class="text-body-2 text-medium-emphasis mt-2 description-clamp">
