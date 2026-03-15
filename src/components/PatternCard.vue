@@ -22,31 +22,12 @@
 
     <v-card-item>
       <v-card-title class="text-body-1 font-weight-bold">{{ pattern.title }}</v-card-title>
-      <v-card-subtitle>{{ pattern.year }} · {{ pattern.technique }}</v-card-subtitle>
     </v-card-item>
 
     <v-card-text class="pt-0">
       <div class="d-flex align-center ga-1 mb-2 text-caption text-medium-emphasis">
-        <v-icon icon="mdi-account-outline" size="14" />
-        <span>{{ pattern.designer }}</span>
-      </div>
-      <div class="d-flex align-center ga-1 mb-3 text-caption text-medium-emphasis">
         <v-icon icon="mdi-map-marker-outline" size="14" />
-        <span>{{ pattern.location }}</span>
-      </div>
-      <div class="d-flex flex-wrap ga-1">
-        <v-chip
-          v-for="label in pattern.labels.slice(0, 3)"
-          :key="label"
-          size="x-small"
-          variant="tonal"
-          color="primary"
-        >
-          {{ label }}
-        </v-chip>
-        <v-chip v-if="pattern.labels.length > 3" size="x-small" variant="tonal" color="secondary">
-          +{{ pattern.labels.length - 3 }}
-        </v-chip>
+        <span>{{ pattern.origin }}</span>
       </div>
     </v-card-text>
 

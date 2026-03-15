@@ -17,7 +17,7 @@
         variant="text" 
         color="white" 
         prepend-icon="mdi-home"
-        class="d-none d-md-flex mx-1"
+        class="d-none d-md-flex ml-1"
       >
         Startseite
       </v-btn>
@@ -62,7 +62,7 @@
         icon="mdi-plus-thick"
         variant="text"
         color="white"
-        class="d-md-none mx-1"
+        class="d-md-none"
       />
 
       <v-btn
@@ -75,11 +75,7 @@
       <template v-if="auth.user">
         <v-menu>
           <template #activator="{ props }">
-            <v-btn v-bind="props" variant="text" class="ml-1" color="white" icon="mdi-account"/>
-              <!-- <v-avatar size="32" color="white">
-                <span class="text-caption font-weight-bold">{{ initials }}</span>
-              </v-avatar> -->
-            <!-- </v-btn> -->
+            <v-btn v-bind="props" variant="text" icon="mdi-account" color="white" class="ml-1"/>
           </template>
           <v-list min-width="180" density="compact">
             <v-list-item
@@ -102,9 +98,7 @@
         </v-menu>
       </template>
       <template v-else>
-        <v-btn to="/login" prepend-icon="mdi-login" variant="text" color="white" class="ml-1">
-          Anmelden
-        </v-btn>
+        <v-btn to="/login" icon="mdi-login" variant="text" color="white" class="ml-1"/>
       </template>
     </v-app-bar>
 
@@ -148,7 +142,7 @@
     <!-- Footer -->
     <v-footer color="primary" class="text-center d-flex flex-column">
       <div class="text-caption text-white opacity-70 py-1">
-        © {{ new Date().getFullYear() }} JacqSuite – Digitale Jacquard-Muster Datenbank
+        © {{ new Date().getFullYear() }} JacqSuite – Muster Datenbank
       </div>
     </v-footer>
   </v-app>

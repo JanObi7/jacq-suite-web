@@ -100,42 +100,8 @@
                     </v-col>
                     <v-col cols="12" sm="6">
                       <v-text-field
-                        v-model.number="form.year"
-                        label="Entstehungsjahr"
-                        type="number"
-                        prepend-inner-icon="mdi-calendar-outline"
-                        variant="outlined"
-                        density="comfortable"
-                        :rules="[rules.required, rules.validYear]"
-                        :disabled="saving"
-                      />
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <v-text-field
-                        v-model="form.technique"
-                        label="Technik"
-                        prepend-inner-icon="mdi-cog-outline"
-                        variant="outlined"
-                        density="comfortable"
-                        :rules="[rules.required]"
-                        :disabled="saving"
-                      />
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <v-text-field
-                        v-model="form.designer"
-                        label="Designer"
-                        prepend-inner-icon="mdi-account-outline"
-                        variant="outlined"
-                        density="comfortable"
-                        :rules="[rules.required]"
-                        :disabled="saving"
-                      />
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <v-text-field
-                        v-model="form.location"
-                        label="Herkunft"
+                        v-model="form.origin"
+                        label="Quelle"
                         prepend-inner-icon="mdi-map-marker-outline"
                         variant="outlined"
                         density="comfortable"
@@ -220,32 +186,6 @@
 
             <!-- Rechte Spalte: Labels + Vorschau -->
             <v-col cols="12" md="4">
-
-              <!-- Labels -->
-              <v-card rounded="lg" class="mb-6">
-                <v-card-title class="text-body-1 font-weight-bold">
-                  <v-icon icon="mdi-tag-multiple-outline" class="mr-2" />
-                  Labels
-                </v-card-title>
-                <v-divider />
-                <v-card-text>
-                  <v-combobox
-                    v-model="form.labels"
-                    :items="store.allLabels"
-                    label="Labels hinzufügen"
-                    prepend-inner-icon="mdi-tag-outline"
-                    variant="outlined"
-                    density="comfortable"
-                    multiple
-                    chips
-                    closable-chips
-                    clearable
-                    hint="Bestehende Labels auswählen oder neue eingeben"
-                    persistent-hint
-                    :disabled="saving"
-                  />
-                </v-card-text>
-              </v-card>
 
               <!-- Symbolbild -->
               <v-card rounded="lg" class="mb-6">
@@ -419,11 +359,7 @@ const form = reactive({
   title: '',
   inventory: '',
   description: '',
-  year: 0,
-  designer: '',
-  location: '',
-  technique: '',
-  labels: [] as string[],
+  origin: '',
   digitized_by: '',
   digitized_at: '',  // ISO-Datum-String (YYYY-MM-DD)
 })
@@ -432,19 +368,15 @@ const form = reactive({
 watch(
   pattern,
   (p) => {
-    if (p) {
-      form.title = p.title
-      form.inventory = p.inventory
-      form.description = p.description
-      form.year = p.year
-      form.designer = p.designer
-      form.location = p.location
-      form.technique = p.technique
-      form.labels = [...p.labels]
-      form.digitized_by = p.digitized_by
-      // ISO-String auf YYYY-MM-DD kürzen für <input type="date">
-      form.digitized_at = p.digitized_at ? p.digitized_at.slice(0, 10) : ''
-    }
+      if (p) {
+        form.title = p.title
+        form.inventory = p.inventory
+        form.description = p.description
+        form.origin = p.origin
+        form.digitized_by = p.digitized_by
+        // ISO-String auf YYYY-MM-DD kürzen für <input type="date">
+        form.digitized_at = p.digitized_at ? p.digitized_at.slice(0, 10) : ''
+      }
   },
   { immediate: true },
 )
@@ -452,18 +384,14 @@ watch(
 // Prüfen ob es ungespeicherte Änderungen gibt
 const isDirty = computed(() => {
   if (!pattern.value) return false
-  return (
-    form.title !== pattern.value.title ||
-    form.inventory !== pattern.value.inventory ||
-    form.description !== pattern.value.description ||
-    form.year !== pattern.value.year ||
-    form.designer !== pattern.value.designer ||
-    form.location !== pattern.value.location ||
-    form.technique !== pattern.value.technique ||
-    JSON.stringify([...form.labels].sort()) !== JSON.stringify([...pattern.value.labels].sort()) ||
-    form.digitized_by !== pattern.value.digitized_by ||
-    form.digitized_at !== pattern.value.digitized_at.slice(0, 10)
-  )
+    return (
+      form.title !== pattern.value.title ||
+      form.inventory !== pattern.value.inventory ||
+      form.description !== pattern.value.description ||
+      form.origin !== pattern.value.origin ||
+      form.digitized_by !== pattern.value.digitized_by ||
+      form.digitized_at !== pattern.value.digitized_at.slice(0, 10)
+    )
 })
 
 // Rollen-Label für Anzeige
@@ -477,8 +405,6 @@ const roleLabel = computed(() => {
 // Validierungsregeln
 const rules = {
   required: (v: unknown) => (v !== null && v !== undefined && v !== '') || 'Pflichtfeld',
-  validYear: (v: number) =>
-    (v >= 1800 && v <= new Date().getFullYear()) || `Jahr muss zwischen 1800 und ${new Date().getFullYear()} liegen`,
 }
 
 // Formular-Ref für Validierung
@@ -560,11 +486,7 @@ async function handleSave() {
       title: form.title,
       inventory: form.inventory,
       description: form.description,
-      year: form.year,
-      designer: form.designer,
-      location: form.location,
-      technique: form.technique,
-      labels: form.labels,
+      origin: form.origin,
       digitized_by: form.digitized_by,
       digitized_at: form.digitized_at,
     })

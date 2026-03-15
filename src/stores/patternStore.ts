@@ -9,11 +9,7 @@ export const usePatternStore = defineStore('patterns', () => {
   const isLoading = ref(false)
   const loadError = ref<string | null>(null)
   const searchQuery = ref('')
-  const filterDesigner = ref('')
-  const filterTechnique = ref('')
-  const filterYearFrom = ref<number | null>(null)
-  const filterYearTo = ref<number | null>(null)
-  const filterLabels = ref<string[]>([])
+  const filterOrigin = ref('')
 
   // load all patterns
   async function loadPatterns() {
@@ -22,14 +18,10 @@ export const usePatternStore = defineStore('patterns', () => {
     try {
       let query = supabase
         .from('patterns')
-        .select(`id, title, description, inventory, year, location, technique,designer,
-          digitized_at, digitized_by,labels,
+        .select(`id, title, description, inventory, origin,
+          digitized_at, digitized_by,
           images:pattern_images(*)`)
-        .order('year', { ascending: false })
-
-      // if (filters.value.year) query = query.eq('year', filters.value.year)
-      // if (filters.value.location) query = query.eq('location', filters.value.location)
-      // if (filters.value.technique) query = query.eq('technique', filters.value.technique)
+        .order('digitized_at', { ascending: false })
 
       const { data, error: err } = await query
       if (err) throw err
@@ -41,46 +33,25 @@ export const usePatternStore = defineStore('patterns', () => {
     }
   }
 
-  // Alle verfügbaren Designer (für Filter-Dropdown)
-  const allDesigners = computed(() =>
-    [...new Set(patterns.value.map((p) => p.designer))].sort(),
+  // Alle verfügbaren Quellenangaben (für Filter-Dropdown)
+  const allOrigins = computed(() =>
+    [...new Set(patterns.value.map((p) => p.origin))].sort(),
   )
 
-  // Alle verfügbaren Techniken (für Filter-Dropdown)
-  const allTechniques = computed(() =>
-    [...new Set(patterns.value.map((p) => p.technique))].sort(),
-  )
-
-  // Alle verfügbaren Tags (für Filter-Chips)
-  const allLabels = computed(() =>
-    [...new Set(patterns.value.flatMap((p) => p.labels))].sort(),
+  // Alle verfügbaren Bearbeiterangaben (für Filter-Dropdown)
+  const allEditors = computed(() =>
+    [...new Set(patterns.value.map((p) => p.digitized_by))].sort(),
   )
 
   // Gefilterte Muster
   const filteredPatterns = computed(() => {
     return patterns.value.filter((p) => {
-      const q = searchQuery.value.toLowerCase()
-      if (
-        q &&
-        !p.title.toLowerCase().includes(q) &&
-        !p.description.toLowerCase().includes(q) &&
-        !p.designer.toLowerCase().includes(q) &&
-        !p.location.toLowerCase().includes(q) &&
-        !p.labels.some((t) => t.toLowerCase().includes(q))
-      ) {
-        return false
-      }
-      if (filterDesigner.value && p.designer !== filterDesigner.value) return false
-      if (filterTechnique.value && p.technique !== filterTechnique.value) return false
-      if (filterYearFrom.value !== null && p.year < filterYearFrom.value) return false
-      if (filterYearTo.value !== null && p.year > filterYearTo.value) return false
-      if (
-        filterLabels.value.length > 0 &&
-        !filterLabels.value.every((t) => p.labels.includes(t))
-      ) {
-        return false
-      }
-      return true
+      const q = searchQuery.value?.toLowerCase()
+      return !(q &&
+        !p.title?.toLowerCase().includes(q) &&
+        !p.description?.toLowerCase().includes(q) &&
+        !p.origin?.toLowerCase().includes(q) &&
+        !p.digitized_by?.toLowerCase().includes(q))
     })
   })
 
@@ -116,11 +87,7 @@ export const usePatternStore = defineStore('patterns', () => {
 
   function resetFilters() {
     searchQuery.value = ''
-    filterDesigner.value = ''
-    filterTechnique.value = ''
-    filterYearFrom.value = null
-    filterYearTo.value = null
-    filterLabels.value = []
+    filterOrigin.value = ''
   }
 
   // Muster und alle zugehörigen Bilder aus Supabase löschen
@@ -145,13 +112,13 @@ export const usePatternStore = defineStore('patterns', () => {
 
   // Neues Muster in Supabase anlegen
   async function createPattern(
-    data: Pick<Pattern, 'title' | 'description' | 'inventory' | 'year' | 'designer' | 'location' | 'technique' | 'labels' | 'digitized_at' | 'digitized_by'>,
+    data: Pick<Pattern, 'title' | 'description' | 'inventory' | 'origin' | 'digitized_at' | 'digitized_by'>,
   ): Promise<Pattern> {
     const { data: created, error } = await supabase
       .from('patterns')
       .insert(data)
-      .select(`id, title, description, inventory, year, location, technique, designer,
-        digitized_at, digitized_by, labels,
+      .select(`id, title, description, inventory, origin,
+        digitized_at, digitized_by,
         images:pattern_images(*)`)
       .single()
     if (error) throw error
@@ -323,7 +290,7 @@ export const usePatternStore = defineStore('patterns', () => {
   // Muster-Metadaten in Supabase aktualisieren
   async function updatePattern(
     id: string,
-    updates: Partial<Pick<Pattern, 'title' | 'inventory' | 'description' | 'year' | 'designer' | 'location' | 'technique' | 'labels' | 'digitized_at' | 'digitized_by'>>,
+    updates: Partial<Pick<Pattern, 'title' | 'inventory' | 'description' | 'origin' | 'digitized_at' | 'digitized_by'>>,
   ): Promise<void> {
     const { error } = await supabase
       .from('patterns')
@@ -343,14 +310,9 @@ export const usePatternStore = defineStore('patterns', () => {
     isLoading,
     loadError,
     searchQuery,
-    filterDesigner,
-    filterTechnique,
-    filterYearFrom,
-    filterYearTo,
-    filterLabels,
-    allDesigners,
-    allTechniques,
-    allLabels,
+    filterOrigin,
+    allOrigins,
+    allEditors,
     filteredPatterns,
     latestPatterns,
     loadPatterns,

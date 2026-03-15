@@ -15,12 +15,8 @@ export interface Pattern {
   title: string
   description: string
   inventory: string
-  year: number
-  designer: string
-  location: string
-  technique: string
+  origin: string
   digitized_at: string // ISO date string
   digitized_by: string
-  labels: string[]
   images?: PatternImage[]
 }

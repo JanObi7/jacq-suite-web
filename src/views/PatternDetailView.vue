@@ -71,180 +71,97 @@
               <v-btn
                 v-if="auth.isEditor"
                 :to="`/patterns/${pattern.id}/edit`"
-                variant="tonal"
+                variant="flat"
                 color="white"
-                prepend-icon="mdi-pencil"
                 size="small"
+                class="d-none d-sm-flex"
+                prepend-icon="mdi-pencil"
               >
                 Bearbeiten
               </v-btn>
               <v-btn
-                v-if="auth.isAdmin"
-                variant="tonal"
-                color="error"
-                prepend-icon="mdi-delete-outline"
+                v-if="auth.isEditor"
+                :to="`/patterns/${pattern.id}/edit`"
+                variant="flat"
+                color="white"
                 size="small"
+                icon="mdi-pencil"
+                class="d-sm-none"
+              />
+              <v-btn
+                v-if="auth.isAdmin"
+                variant="flat"
+                color="error"
+                size="small"
+                class="d-none d-sm-flex"
+                prepend-icon="mdi-delete-outline"
                 @click="confirmDelete = true"
               >
                 Löschen
               </v-btn>
+              <v-btn
+                v-if="auth.isAdmin"
+                variant="flat"
+                color="error"
+                size="small"
+                icon="mdi-delete-outline"
+                class="d-sm-none"
+                @click="confirmDelete = true"
+              />
             </div>
           </div>
-          <h1 class="text-h4 font-weight-bold mb-1">{{ pattern.title }}</h1>
-          <div class="d-flex align-center ga-3 flex-wrap opacity-80 text-body-2">
-            <span>
-              <v-icon icon="mdi-calendar-outline" size="16" class="mr-1" />
-              {{ pattern.year }}
-            </span>
-            <span>
-              <v-icon icon="mdi-account-outline" size="16" class="mr-1" />
-              {{ pattern.designer }}
-            </span>
-            <span>
-              <v-icon icon="mdi-map-marker-outline" size="16" class="mr-1" />
-              {{ pattern.location }}
-            </span>
+          <div class="d-flex align-center ga-4">
+            <!-- Symbolbild Avatar -->
+            <v-avatar size="80" rounded="lg" class="bg-white">
+              <v-img
+                :src="store.getSymbolUrl(pattern)"
+                :alt="pattern.title"
+                cover
+              >
+                <template #placeholder>
+                  <div class="d-flex align-center justify-center fill-height">
+                    <v-progress-circular indeterminate color="primary" size="24" />
+                  </div>
+                </template>
+                <template #error>
+                  <v-icon icon="mdi-image-off-outline" size="32" color="grey" />
+                </template>
+              </v-img>
+            </v-avatar>
+            
+            <!-- Titel und Untertitel -->
+            <div>
+              <h1 class="text-h4 font-weight-bold mb-1">{{ pattern.title }}</h1>
+              <div class="d-flex align-center ga-3 flex-wrap opacity-80 text-body-2">
+                <span>
+                  <v-icon icon="mdi-map-marker-outline" size="16" class="mr-1" />
+                  {{ pattern.origin }}
+                </span>
+              </div>
+            </div>
           </div>
         </v-container>
       </v-sheet>
 
       <v-container class="py-6">
         <v-row>
-          <!-- Linke Spalte: Bilder -->
-          <v-col cols="12" md="7" lg="8">
-
-            <!-- Symbolbild (immer quadratisch 500×500 px) -->
-            <v-card rounded="lg" class="mb-4 overflow-hidden">
-              <v-card-title class="text-body-1 font-weight-bold">
-                <v-icon icon="mdi-image-outline" class="mr-2" />
-                Symbolbild
-              </v-card-title>
-              <v-divider />
-              <v-card-text class="pa-3">
-                <v-img
-                  :src="store.getSymbolUrl(pattern)"
-                  :alt="pattern.title"
-                  :aspect-ratio="1"
-                  cover
-                  rounded="md"
-                  class="bg-grey-lighten-3"
-                  style="max-width: 500px; margin: 0 auto"
-                >
-                  <template #placeholder>
-                    <div class="d-flex align-center justify-center fill-height">
-                      <v-progress-circular indeterminate color="primary" />
-                    </div>
-                  </template>
-                  <template #error>
-                    <div class="d-flex flex-column align-center justify-center fill-height ga-2">
-                      <v-icon icon="mdi-image-off-outline" size="48" color="grey" />
-                      <span class="text-caption text-medium-emphasis">Kein Symbolbild vorhanden</span>
-                    </div>
-                  </template>
-                  <!-- Auflösungs-Badge -->
-                  <v-chip
-                    color="primary"
-                    size="x-small"
-                    variant="flat"
-                    class="position-absolute ma-2"
-                    style="bottom: 0; right: 0"
-                    prepend-icon="mdi-resize"
-                  >
-                    500 × 500 px
-                  </v-chip>
-                </v-img>
-              </v-card-text>
-            </v-card>
-
-          </v-col>
-
-          <!-- Rechte Spalte: Metadaten -->
-          <v-col cols="12" md="5" lg="4">
-            <!-- Beschreibung -->
-            <v-card rounded="lg" class="mb-4">
-              <v-card-title class="text-body-1 font-weight-bold">
-                <v-icon icon="mdi-text-box-outline" class="mr-2" />
-                Beschreibung
-              </v-card-title>
-              <v-divider />
-              <v-card-text>
-                <p class="text-body-2">{{ pattern.description }}</p>
-              </v-card-text>
-            </v-card>
-
-            <!-- Metadaten -->
+          <!-- Spalte: Metadaten -->
+          <v-col cols="12" md="6">
             <v-card rounded="lg" class="mb-4">
               <v-card-title class="text-body-1 font-weight-bold">
                 <v-icon icon="mdi-information-outline" class="mr-2" />
-                Metadaten
+                Daten
               </v-card-title>
               <v-divider />
               <v-list density="compact">
-                <v-list-item>
-                  <template #prepend>
-                    <v-icon icon="mdi-calendar-outline" color="primary" size="20" />
-                  </template>
-                  <v-list-item-title class="text-caption text-medium-emphasis">Entstehungsjahr</v-list-item-title>
-                  <v-list-item-subtitle class="text-body-2 font-weight-medium">{{ pattern.year }}</v-list-item-subtitle>
-                </v-list-item>
-                <v-divider inset />
-                <v-list-item>
-                  <template #prepend>
-                    <v-icon icon="mdi-account-outline" color="primary" size="20" />
-                  </template>
-                  <v-list-item-title class="text-caption text-medium-emphasis">Designer</v-list-item-title>
-                  <v-list-item-subtitle class="text-body-2 font-weight-medium">{{ pattern.designer }}</v-list-item-subtitle>
-                </v-list-item>
-                <v-divider inset />
                 <v-list-item>
                   <template #prepend>
                     <v-icon icon="mdi-map-marker-outline" color="primary" size="20" />
                   </template>
-                  <v-list-item-title class="text-caption text-medium-emphasis">Herkunft</v-list-item-title>
-                  <v-list-item-subtitle class="text-body-2 font-weight-medium">{{ pattern.location }}</v-list-item-subtitle>
+                  <v-list-item-title class="text-caption text-medium-emphasis">Quelle</v-list-item-title>
+                  <v-list-item-subtitle class="text-body-2 font-weight-medium">{{ pattern.origin }}</v-list-item-subtitle>
                 </v-list-item>
                 <v-divider inset />
-                <v-list-item>
-                  <template #prepend>
-                    <v-icon icon="mdi-cog-outline" color="primary" size="20" />
-                  </template>
-                  <v-list-item-title class="text-caption text-medium-emphasis">Technik</v-list-item-title>
-                  <v-list-item-subtitle class="text-body-2 font-weight-medium">{{ pattern.technique }}</v-list-item-subtitle>
-                </v-list-item>
-              </v-list>
-            </v-card>
-
-            <!-- Tags -->
-            <v-card rounded="lg" class="mb-4">
-              <v-card-title class="text-body-1 font-weight-bold">
-                <v-icon icon="mdi-tag-multiple-outline" class="mr-2" />
-                Kategorien
-              </v-card-title>
-              <v-divider />
-              <v-card-text>
-                <div class="d-flex flex-wrap ga-2">
-                  <v-chip
-                    v-for="label in pattern.labels"
-                    :key="label"
-                    size="small"
-                    variant="tonal"
-                    color="primary"
-                    :to="`/patterns?label=${label}`"
-                  >
-                    {{ label }}
-                  </v-chip>
-                </div>
-              </v-card-text>
-            </v-card>
-
-            <!-- Digitalisierung -->
-            <v-card rounded="lg" class="mb-4">
-              <v-card-title class="text-body-1 font-weight-bold">
-                <v-icon icon="mdi-image-edit-outline" class="mr-2" />
-                Digitalisierung
-              </v-card-title>
-              <v-divider />
-              <v-list density="compact">
                 <v-list-item>
                   <template #prepend>
                     <v-icon icon="mdi-identifier" color="primary" size="20" />
@@ -274,119 +191,122 @@
                     {{ formatDate(pattern.digitized_at) }}
                   </v-list-item-subtitle>
                 </v-list-item>
-                <v-divider inset />
-                <v-list-item>
-                  <template #prepend>
-                    <v-icon icon="mdi-image-multiple-outline" color="primary" size="20" />
-                  </template>
-                  <v-list-item-title class="text-caption text-medium-emphasis">Bilder</v-list-item-title>
-                  <v-list-item-subtitle class="text-body-2 font-weight-medium">
-                    {{ pattern.images?.length }} Bild{{ pattern.images?.length !== 1 ? 'er' : '' }}
-                  </v-list-item-subtitle>
-                </v-list-item>
               </v-list>
             </v-card>
+
+            <v-card rounded="lg" class="mb-4">
+              <v-card-title class="text-body-1 font-weight-bold">
+                <v-icon icon="mdi-text-box-outline" class="mr-2" />
+                Beschreibung
+              </v-card-title>
+              <v-divider />
+              <v-card-text>
+                <p class="text-body-2">{{ pattern.description }}</p>
+              </v-card-text>
+            </v-card>
           </v-col>
-        </v-row>
 
-        <!-- Bildübersicht Tabelle -->
-        <v-card rounded="lg">
-          <v-card-title class="text-body-1 font-weight-bold">
-            <v-icon icon="mdi-image-multiple-outline" class="mr-2" />
-            Alle Bilder dieses Musters
-          </v-card-title>
-          <v-divider />
+          <!-- Spalte: Bildübersicht -->
+          <v-col cols="12" md="6">
+            <v-card rounded="lg">
+              <v-card-title class="text-body-1 font-weight-bold">
+                <v-icon icon="mdi-image-multiple-outline" class="mr-2" />
+                Alle Bilder dieses Musters
+              </v-card-title>
+              <v-divider />
 
-          <!-- ImageViewer über der Tabelle -->
-          <v-card-text class="pa-3">
-            <ImageViewer :image="activeImage">
-              <v-img
-                :src="store.getThumbnailUrl(activeImage)"
-                :alt="activeImage.label"
-                height="420"
-                cover
-                class="bg-grey-lighten-3 cursor-pointer rounded-lg"
-              >
-                <template #placeholder>
-                  <div class="d-flex align-center justify-center fill-height">
-                    <v-progress-circular indeterminate color="primary" />
-                  </div>
-                </template>
-                <!-- Rolle Badge -->
-                <v-chip
-                  :color="roleColor(activeImage.role)"
-                  size="small"
-                  variant="flat"
-                  class="position-absolute ma-3"
-                  style="bottom: 0; left: 0"
-                  :prepend-icon="roleIcon(activeImage.role)"
-                >
-                  {{ activeImage.label }}
-                </v-chip>
-                <!-- HD Badge -->
-                <v-chip
-                  color="accent"
-                  size="small"
-                  variant="flat"
-                  class="position-absolute ma-3"
-                  style="bottom: 0; right: 0"
-                  prepend-icon="mdi-magnify-plus"
-                >
-                  {{ activeImage.width?.toLocaleString('de-DE') }} ×
-                  {{ activeImage.height?.toLocaleString('de-DE') }} px
-                </v-chip>
-              </v-img>
-            </ImageViewer>
-            <div class="text-caption text-medium-emphasis text-center mt-1">
-              <v-icon icon="mdi-cursor-pointer" size="14" class="mr-1" />
-              Klicken für Vollbildansicht
-            </div>
-          </v-card-text>
-
-          <v-divider />
-          <v-table density="compact">
-            <thead>
-              <tr>
-                <th>Vorschau</th>
-                <th>Bezeichnung</th>
-                <th>Rolle</th>
-                <th>Auflösung</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="img in pattern.images"
-                :key="img.id"
-                class="cursor-pointer"
-                :class="{ 'row-active': activeImage.id === img.id }"
-                @click="activeImage = img"
-              >
-                <td class="py-2">
+              <!-- ImageViewer über der Tabelle -->
+              <v-card-text class="pa-3">
+                <ImageViewer :image="activeImage">
                   <v-img
-                    :src="store.getThumbnailUrl(img)"
-                    width="60"
-                    height="45"
+                    :src="store.getThumbnailUrl(activeImage)"
+                    :alt="activeImage.label"
+                    height="420"
                     cover
-                    rounded="sm"
-                    class="bg-grey-lighten-3"
-                  />
-                </td>
-                <td>{{ img.label }}</td>
-                <td>
-                  <v-chip :color="roleColor(img.role)" size="x-small" :prepend-icon="roleIcon(img.role)">
-                    {{ roleLabel(img.role) }}
-                  </v-chip>
-                </td>
-                <td class="text-caption">
-                  <span v-if="img.width && img.height">
-                    {{ img.width.toLocaleString('de-DE') }} × {{ img.height.toLocaleString('de-DE') }} px
-                  </span>
-                  <span v-else class="text-medium-emphasis">–</span>
-                </td>
-              </tr>
-            </tbody>
-          </v-table>
-        </v-card>
+                    class="bg-grey-lighten-3 cursor-pointer rounded-lg"
+                  >
+                    <template #placeholder>
+                      <div class="d-flex align-center justify-center fill-height">
+                        <v-progress-circular indeterminate color="primary" />
+                      </div>
+                    </template>
+                    <!-- Rolle Badge -->
+                    <v-chip
+                      :color="roleColor(activeImage.role)"
+                      size="small"
+                      variant="flat"
+                      class="position-absolute ma-3"
+                      style="bottom: 0; left: 0"
+                      :prepend-icon="roleIcon(activeImage.role)"
+                    >
+                      {{ activeImage.label }}
+                    </v-chip>
+                    <!-- HD Badge -->
+                    <v-chip
+                      color="accent"
+                      size="small"
+                      variant="flat"
+                      class="position-absolute ma-3"
+                      style="bottom: 0; right: 0"
+                      prepend-icon="mdi-magnify-plus"
+                    >
+                      {{ activeImage.width?.toLocaleString('de-DE') }} ×
+                      {{ activeImage.height?.toLocaleString('de-DE') }} px
+                    </v-chip>
+                  </v-img>
+                </ImageViewer>
+                <div class="text-caption text-medium-emphasis text-center mt-1">
+                  <v-icon icon="mdi-cursor-pointer" size="14" class="mr-1" />
+                  Klicken für Vollbildansicht
+                </div>
+              </v-card-text>
+
+              <v-divider />
+              <v-table density="compact">
+                <thead>
+                  <tr>
+                    <th>Vorschau</th>
+                    <th>Bezeichnung</th>
+                    <th>Rolle</th>
+                    <th>Auflösung</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="img in pattern.images"
+                    :key="img.id"
+                    class="cursor-pointer"
+                    :class="{ 'row-active': activeImage.id === img.id }"
+                    @click="activeImage = img"
+                  >
+                    <td class="py-2">
+                      <v-img
+                        :src="store.getThumbnailUrl(img)"
+                        width="60"
+                        height="45"
+                        cover
+                        rounded="sm"
+                        class="bg-grey-lighten-3"
+                      />
+                    </td>
+                    <td>{{ img.label }}</td>
+                    <td>
+                      <v-chip :color="roleColor(img.role)" size="x-small" :prepend-icon="roleIcon(img.role)">
+                        {{ roleLabel(img.role) }}
+                      </v-chip>
+                    </td>
+                    <td class="text-caption">
+                      <span v-if="img.width && img.height">
+                        {{ img.width.toLocaleString('de-DE') }} × {{ img.height.toLocaleString('de-DE') }} px
+                      </span>
+                      <span v-else class="text-medium-emphasis">–</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </v-table>
+            </v-card>
+          </v-col>  
+        </v-row>
       </v-container>
     </template>
 

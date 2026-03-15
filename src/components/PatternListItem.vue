@@ -25,7 +25,7 @@
             <div>
               <div class="text-body-1 font-weight-bold">{{ pattern.title }}</div>
               <div class="text-caption text-medium-emphasis">
-                {{ pattern.year }} · {{ pattern.designer }} · {{ pattern.technique }} · {{ pattern.location }}
+                {{ pattern.origin }}
               </div>
             </div>
             <!-- <div class="d-flex flex-column align-end ga-1 flex-shrink-0">
@@ -41,20 +41,6 @@
         </div>
 
         <div class="d-flex align-center justify-space-between mt-2 flex-wrap ga-1">
-          <div class="d-flex flex-wrap ga-1">
-            <v-chip
-              v-for="tag in pattern.labels.slice(0, 4)"
-              :key="tag"
-              size="x-small"
-              variant="tonal"
-              color="primary"
-            >
-              {{ tag }}
-            </v-chip>
-            <v-chip v-if="pattern.labels.length > 4" size="x-small" variant="tonal" color="secondary">
-              +{{ pattern.labels.length - 4 }}
-            </v-chip>
-          </div>
           <div class="d-flex align-center ga-3 text-caption text-medium-emphasis">
             <span>
               <v-icon icon="mdi-account-outline" size="12" class="mr-1" />

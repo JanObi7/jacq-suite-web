@@ -4,8 +4,7 @@
     <div class="hero-section py-5 px-4 text-center text-white">
       <v-container>
         <div class="d-flex align-center justify-center ga-3 mb-2">
-          <v-icon icon="mdi-loom" size="36" class="opacity-90" />
-          <h1 class="text-h5 font-weight-bold">Digitale Jacquard-Muster</h1>
+          <h1 class="text-h5 font-weight-bold">JacqSuite - Datenbank</h1>
         </div>
         <p class="text-body-2 mb-3 mx-auto hero-subtitle" style="max-width: 560px">
           Eine Sammlung historischer Webmuster – digitalisiert und für die Nachwelt bewahrt.
@@ -29,15 +28,15 @@
         <v-row justify="center" class="text-white text-center">
           <v-col cols="4" sm="3" class="py-1">
             <div class="text-body-1 font-weight-bold">{{ store.patterns.length }}</div>
-            <div class="text-caption opacity-80">Muster gesamt</div>
+            <div class="text-caption opacity-80">Muster</div>
           </v-col>
           <v-col cols="4" sm="3" class="py-1">
-            <div class="text-body-1 font-weight-bold">{{ store.allDesigners.length }}</div>
-            <div class="text-caption opacity-80">Designer</div>
+            <div class="text-body-1 font-weight-bold">{{ store.allOrigins.length }}</div>
+            <div class="text-caption opacity-80">Quellen</div>
           </v-col>
           <v-col cols="4" sm="3" class="py-1">
-            <div class="text-body-1 font-weight-bold">{{ store.allTechniques.length }}</div>
-            <div class="text-caption opacity-80">Techniken</div>
+            <div class="text-body-1 font-weight-bold">{{ store.allEditors.length }}</div>
+            <div class="text-caption opacity-80">Bearbeiter</div>
           </v-col>
         </v-row>
       </v-container>
@@ -91,7 +90,7 @@
               <v-icon icon="mdi-filter-variant" size="32" color="white" class="mb-3" />
               <h4 class="text-h6 font-weight-bold mb-2">Umfangreiche Filter</h4>
               <p class="text-body-2 text-medium-emphasis">
-                Filtern Sie nach Designer, Technik, Entstehungsjahr und Tags – finden Sie genau das
+                Durchsuchen Sie die Sammlung und finden Sie genau das
                 Muster, das Sie suchen.
               </p>
             </div>
@@ -101,8 +100,8 @@
               <v-icon icon="mdi-information-outline" size="32" color="white" class="mb-3" />
               <h4 class="text-h6 font-weight-bold mb-2">Vollständige Metadaten</h4>
               <p class="text-body-2 text-medium-emphasis">
-                Jedes Muster enthält umfangreiche Metainformationen: Entstehungsjahr, Designer,
-                Herkunft, Technik und mehr.
+                Jedes Muster enthält umfangreiche Metainformationen: Quelle, Bearbeiter,
+                Digitalisierungsdatum und mehr.
               </p>
             </div>
           </v-col>

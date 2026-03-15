@@ -79,49 +79,15 @@
                   </v-col>
                   <v-col cols="12" sm="6">
                     <v-text-field
-                      v-model.number="form.year"
-                      label="Entstehungsjahr *"
-                      type="number"
-                      prepend-inner-icon="mdi-calendar-outline"
-                      variant="outlined"
-                      density="comfortable"
-                      :rules="[rules.required, rules.validYear]"
-                      :disabled="saving"
-                    />
-                  </v-col>
-                  <v-col cols="12" sm="6">
-                    <v-text-field
-                      v-model="form.technique"
-                      label="Technik *"
-                      prepend-inner-icon="mdi-cog-outline"
-                      variant="outlined"
-                      density="comfortable"
-                      :rules="[rules.required]"
-                      :disabled="saving"
-                    />
-                  </v-col>
-                  <v-col cols="12" sm="6">
-                    <v-text-field
-                      v-model="form.designer"
-                      label="Designer *"
-                      prepend-inner-icon="mdi-account-outline"
-                      variant="outlined"
-                      density="comfortable"
-                      :rules="[rules.required]"
-                      :disabled="saving"
-                    />
-                  </v-col>
-                  <v-col cols="12" sm="6">
-                    <v-text-field
-                      v-model="form.location"
-                      label="Herkunft *"
-                      prepend-inner-icon="mdi-map-marker-outline"
-                      variant="outlined"
-                      density="comfortable"
-                      :rules="[rules.required]"
-                      :disabled="saving"
-                    />
-                  </v-col>
+                        v-model="form.origin"
+                        label="Quelle *"
+                        prepend-inner-icon="mdi-map-marker-outline"
+                        variant="outlined"
+                        density="comfortable"
+                        :rules="[rules.required]"
+                        :disabled="saving"
+                      />
+                    </v-col>
                 </v-row>
               </v-card-text>
             </v-card>
@@ -187,32 +153,6 @@
 
           <!-- Rechte Spalte: Labels + Hinweis -->
           <v-col cols="12" md="4">
-
-            <!-- Labels -->
-            <v-card rounded="lg" class="mb-6">
-              <v-card-title class="text-body-1 font-weight-bold">
-                <v-icon icon="mdi-tag-multiple-outline" class="mr-2" />
-                Labels
-              </v-card-title>
-              <v-divider />
-              <v-card-text>
-                <v-combobox
-                  v-model="form.labels"
-                  :items="store.allLabels"
-                  label="Labels hinzufügen"
-                  prepend-inner-icon="mdi-tag-outline"
-                  variant="outlined"
-                  density="comfortable"
-                  multiple
-                  chips
-                  closable-chips
-                  clearable
-                  hint="Bestehende Labels auswählen oder neue eingeben"
-                  persistent-hint
-                  :disabled="saving"
-                />
-              </v-card-text>
-            </v-card>
 
             <!-- Hinweis Bilder -->
             <v-card rounded="lg" class="mb-6" color="info" variant="tonal">
@@ -293,11 +233,7 @@ const form = reactive({
   title: '',
   inventory: '',
   description: '',
-  year: new Date().getFullYear(),
-  designer: '',
-  location: '',
-  technique: '',
-  labels: [] as string[],
+  origin: '',
   digitized_by: auth.profile?.display_name ?? auth.user?.email ?? '',
   digitized_at: new Date().toISOString().slice(0, 10), // Heute als Standardwert
 })
@@ -305,9 +241,6 @@ const form = reactive({
 // Validierungsregeln
 const rules = {
   required: (v: unknown) => (v !== null && v !== undefined && v !== '') || 'Pflichtfeld',
-  validYear: (v: number) =>
-    (v >= 1800 && v <= new Date().getFullYear()) ||
-    `Jahr muss zwischen 1800 und ${new Date().getFullYear()} liegen`,
 }
 
 // Formular-Ref für Validierung
@@ -329,11 +262,7 @@ async function handleSave() {
       title: form.title,
       inventory: form.inventory,
       description: form.description,
-      year: form.year,
-      designer: form.designer,
-      location: form.location,
-      technique: form.technique,
-      labels: form.labels,
+      origin: form.origin,
       digitized_by: form.digitized_by,
       digitized_at: form.digitized_at,
     })
