@@ -168,7 +168,9 @@ const initials = computed(() => {
 })
 
 const roleLabel = computed(() => {
-  return auth.profile?.role == 'admin' ? 'Administrator' : 'Benutzer'
+  if (auth.profile?.role == 'admin') return 'Administrator'
+  if (auth.profile?.role == 'editor') return 'Bearbeiter'
+  return 'Benutzer'
 })
 
 </script>
