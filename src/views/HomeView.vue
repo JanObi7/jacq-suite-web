@@ -48,7 +48,7 @@
         <div>
           <h2 class="text-h5 font-weight-bold">Zuletzt digitalisiert</h2>
           <p class="text-body-2 text-medium-emphasis mt-1">
-            Die 5 neuesten Ergänzungen der Sammlung
+            Die 6 neuesten Ergänzungen der Sammlung
           </p>
         </div>
         <v-btn to="/patterns" variant="tonal" color="primary" prepend-icon="mdi-arrow-right">

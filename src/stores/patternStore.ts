@@ -59,7 +59,7 @@ export const usePatternStore = defineStore('patterns', () => {
   const latestPatterns = computed(() => {
     return [...patterns.value]
       .sort((a, b) => new Date(b.digitized_at).getTime() - new Date(a.digitized_at).getTime())
-      .slice(0, 5)
+      .slice(0, 6)
   })
 
   function getPatternById(id: string): Pattern | undefined {
