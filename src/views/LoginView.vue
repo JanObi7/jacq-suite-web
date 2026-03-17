@@ -202,7 +202,7 @@ async function handleRegister() {
   successMsg.value = ''
   try {
     await auth.signUp(regEmail.value, regPassword.value)
-    successMsg.value = 'Konto erstellt! Du kannst dich nun anmelden.'
+    successMsg.value = 'Konto erstellt! Eine Email zur Bestätigung wurde versendet.'
     tab.value = 'login'
     email.value = regEmail.value
     regEmail.value = ''
