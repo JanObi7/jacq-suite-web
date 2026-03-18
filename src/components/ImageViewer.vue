@@ -68,7 +68,7 @@ watch(dialog, async (open) => {
       const image_url = store.getImageUrl(props.image)
       viewer = OpenSeadragon({
         element: osdContainer.value,
-        prefixUrl: "/jacq-suite-web/openseadragon/images/",
+        prefixUrl: "/openseadragon/images/",
         tileSources: image_url.endsWith(".dzi") ? image_url : {type: 'image', url: image_url },
         showNavigationControl: true,
         showNavigator: true,
