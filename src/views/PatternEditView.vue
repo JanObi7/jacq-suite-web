@@ -25,9 +25,50 @@
             >
               Zurück zur Detailansicht
             </v-btn>
-            <v-chip color="white" variant="tonal" prepend-icon="mdi-pencil" size="small">
-              Bearbeitungsmodus
-            </v-chip>
+            <div class="d-flex ga-2">
+              <v-btn
+                :to="`/patterns/${pattern.id}`"
+                variant="flat"
+                color="white"
+                size="small"
+                class="d-none d-sm-flex"
+                prepend-icon="mdi-close"
+                :disabled="saving"
+              >
+                Abbrechen
+              </v-btn>
+              <v-btn
+                :to="`/patterns/${pattern.id}`"
+                variant="flat"
+                color="white"
+                size="small"
+                icon="mdi-close"
+                class="d-sm-none"
+                :disabled="saving"
+              />
+              <v-btn
+                variant="flat"
+                :color="isDirty ? 'error' : 'white'"
+                size="small"
+                class="d-none d-sm-flex"
+                prepend-icon="mdi-content-save-outline"
+                :disabled="!isDirty"
+                :loading="saving"
+                @click="handleSave"
+              >
+                Speichern
+              </v-btn>
+              <v-btn
+                variant="flat"
+                :color="isDirty ? 'error' : 'white'"
+                size="small"
+                icon="mdi-content-save-outline"
+                class="d-sm-none"
+                :disabled="!isDirty"
+                :loading="saving"
+                @click="handleSave"
+              />
+            </div>
           </div>
           <h1 class="text-h4 font-weight-bold mb-1">{{ pattern.title }}</h1>
           <div class="text-body-2 opacity-80">
@@ -284,49 +325,8 @@
                 </v-card-text>
               </v-card>
 
-              <!-- Änderungsübersicht -->
-              <v-card v-if="isDirty" rounded="lg" class="mb-6" color="warning" variant="tonal">
-                <v-card-text class="d-flex align-center ga-2">
-                  <v-icon icon="mdi-pencil-circle-outline" color="warning" />
-                  <span class="text-body-2">
-                    Es gibt ungespeicherte Änderungen.
-                  </span>
-                </v-card-text>
-              </v-card>
-
             </v-col>
           </v-row>
-
-          <!-- Aktionsleiste -->
-          <v-card rounded="lg">
-            <v-card-text class="d-flex align-center justify-space-between flex-wrap ga-3">
-              <div class="text-body-2 text-medium-emphasis">
-                <v-icon icon="mdi-shield-account-outline" size="16" class="mr-1" />
-                Bearbeitung als <strong>{{ auth.profile?.display_name ?? auth.user?.email }}</strong>
-                ({{ roleLabel }})
-              </div>
-              <div class="d-flex ga-3">
-                <v-btn
-                  :to="`/patterns/${pattern.id}`"
-                  variant="tonal"
-                  color="secondary"
-                  prepend-icon="mdi-close"
-                  :disabled="saving"
-                >
-                  Abbrechen
-                </v-btn>
-                <v-btn
-                  type="submit"
-                  color="primary"
-                  prepend-icon="mdi-content-save-outline"
-                  :loading="saving"
-                  :disabled="!isDirty"
-                >
-                  Speichern
-                </v-btn>
-              </div>
-            </v-card-text>
-          </v-card>
 
         </v-form>
       </v-container>

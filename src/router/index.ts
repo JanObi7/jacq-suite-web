@@ -45,8 +45,11 @@ const router = createRouter({
 })
 
 // Navigation Guard: Zugriffsschutz für geschützte Routen
-router.beforeEach(async (to) => {
-  if (!to.meta.requiresAuth) return true
+router.beforeEach(async (to, from) => {
+  // Keine Authentifizierung erforderlich
+  if (!to.meta.requiresAuth) {
+    return true
+  }
 
   const auth = useAuthStore()
 
